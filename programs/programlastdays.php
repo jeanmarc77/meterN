@@ -11,12 +11,9 @@ include '../config/config_layout.php';
 date_default_timezone_set('UTC');;
 
 $dir      = '../data/meters/';
-$output = array();
-$output   = glob($dir . '*.csv');
-$cntmeter = count($output);
-sort($output);
-
 $unitlist = array();
+$SYSlist = array();
+$stack   = array();
 $yaxis    = 0;
 $cnt      = 0;
 
@@ -26,73 +23,60 @@ for ($metnum = 1; $metnum <= $NUMMETER; $metnum++) {
 		${'LASTD_MET' . $metnum} = false;
 	}
 	if (${'LASTD_MET' . $metnum}) {
+		array_push($SYSlist, $metnum);
 		$cnt++;
 	}
 }
+sort($SYSlist);
+$cnt = count($SYSlist);
 
 $datanum=0;
-for ($metnum = 1; $metnum <= $NUMMETER; $metnum++) {
+$yesterd = ((strtotime(date('Ymd')) - 86400) * 1000);
+
+for ($i = 0; $i < $cnt; $i++) {
+	$metnum = $SYSlist[$i];
 	$PRODXDAYS = 15;
+	$thisyear = date('Y',strtotime('-1 days'));
 
-	if (${'LASTD_MET' . $metnum}) {
-		$SYSlist = array();
-		$stack   = array();
-		$srch = $metnum .preg_quote(${'METNAME'.$metnum});
-
-		for ($i = 0; $i < $cntmeter; $i++) {
-			if (preg_match("/$srch/", $output[$i])) {
-				array_push($SYSlist, $output[$i]);
-			}
-		}
-
-		sort($SYSlist);
-		$cnt = count($SYSlist);
-
-		$j       = 0;
-		$h       = 1; // which year file to takes
-		$day_num = 0;
+	$j       = 0;
+	$day_num = 0;
 
 		while ($day_num < $PRODXDAYS) { // Digging
-			if (($cnt - $h) >= 0) { // file exist
-
-				$lines       = file($SYSlist[$cnt - $h]);
+			$filename    = $dir . $metnum . ${'METNAME'.$metnum} . $thisyear . '.csv';
+			if (file_exists($filename)) { // file exist
+				$lines       = file($filename);
 				$countalines = count($lines);
 				$array       = preg_split("/,/", $lines[$countalines - $j - 1]);
 				if (isset($array[1])){
-					$year    = substr($SYSlist[$cnt - $h], -8, 4);
+					$year  = substr($array[0], 0, 4);
 					$month   = substr($array[0], 4, 2);
 					$day     = substr($array[0], 6, 2);
-					$UTCdate = strtotime($year . '-' . $month . '-' . $day);
-					$UTCdate *= 1000;
-					settype($array[1], 'float');
-					if (${'TYPE' . $metnum} == 'Elect') {
-						$array[1]/=1000;
-					}
+					$UTCdate = ((strtotime($year . '-' . $month . '-' . $day))*1000);
+	
+					if ($yesterd - $UTCdate < (86400000 * 20)) {
+						settype($array[1], 'float');
+						if (${'TYPE' . $metnum} == 'Elect') {
+							$array[1]/=1000;
+						}
 
-					$stack[$day_num] = array(
-						$UTCdate,
-						$array[1]
-					);
-					$day_num++;
+						$stack[$day_num] = array(
+							$UTCdate,
+							$array[1]
+						);
+						$day_num++;
+					}
 				}
 				$j++;
 
-				if ($countalines == $j) {
-					if ($h < $cnt) {
-						$h++;
-						$lines       = file($SYSlist[$cnt - $h]); //Takes older file
-						$countalines = count($lines);
-						$j           = 0;
+				if ($countalines == $j || $j == $PRODXDAYS) {
+					if ($thisyear == date('Y')) {
+						$thisyear--; //Takes older file
+						$j = 0;
 					} else {
 						$PRODXDAYS = $day_num; //Stop
 					}
 				}
 			} else {
-				$yesterd   = ((strtotime(date('Ymd')) - 86400) * 1000);
-				$stack[0]  = array(
-					$yesterd,
-					0
-				);
 				$PRODXDAYS = $day_num; //Stop
 			} // file exist
 		} // digging
@@ -117,7 +101,6 @@ for ($metnum = 1; $metnum <= $NUMMETER; $metnum++) {
 			'data' => $stack
 		);
 		$datanum++;
-	} // if show
 } // for each meter
 
 $jsonreturn = array(
