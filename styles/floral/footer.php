@@ -10,7 +10,7 @@
   <tr valign="top"> 
     <td width="128">
     </td>
-    <td COLSPAN=2 align="center"><font size="-4"><a href="http://www.123solar.org/metern">Powered by meterN</a></font></td>
+    <td COLSPAN=2 align="center"><font size="-4"><a href="https://github.com/jeanmarc77/meterN">Powered by meterN</a></font></td>
   </tr>
 </table>
 </body>
