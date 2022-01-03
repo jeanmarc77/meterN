@@ -33,7 +33,7 @@
  
  Support, Update & Contact ────────────────────────────────────────────────────
 
-  To get support, updates or contact please go to http://www.metern.org
+  To get support, updates or contact please go to https://github.com/jeanmarc77/meterN/
 
  License & External copyrights ────────────────────────────────────────────────
 
