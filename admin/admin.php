@@ -215,7 +215,6 @@ if ($startstop != 'start' && $startstop != 'stop') {
 <tr><td>&nbsp;</td></tr>
 <tr><td width=13></td><td align='left'><b>Misc.</b></td></tr>
 <tr><td width=13><img src='../styles/default/images/sqe.gif'></td><td align='left'><a href='help.php'>Help and debugger</a></td></tr>
-<tr><td width=13><img src='../styles/default/images/sqe.gif'></td><td align='left'><a href='https://123solar.org/phpBB/'>Forum</a></td></tr>
 <tr><td width=13><span id='msgico'><span></td><td><span id='msg'><span></td></tr>
 </table>
 
