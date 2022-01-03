@@ -10,7 +10,7 @@ include 'secure.php';
 include '../scripts/version.php';
 include '../scripts/links.php';
 
-$url = 'https://metern.org/latest_version.php';
+$url = 'https://raw.githubusercontent.com/jeanmarc77/meterN/main/other/latest_version.json';
 ?>
 <!DOCTYPE html>
 <html>

@@ -123,6 +123,7 @@ function pushover($aid, $uid, $title, $msg) // Push-over
 			CURLOPT_POSTFIELDS => array(
 				'token' => "$aid",
 				'user' => "$uid",
+				'title' => "$title",
 				'message' => "$msg"
 			)
 		));

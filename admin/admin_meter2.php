@@ -135,10 +135,10 @@ if (!empty($_POST['TLGRTOKx']) && is_string($_POST['TLGRTOKx'])) {
 } else {
 	$TLGRTOKx = '';
 }
-if (!empty($_POST['TLGRCIDx']) && is_string($_POST['TLGRCIDx'])) {
-	$TLGRCIDx = htmlspecialchars($_POST['TLGRCIDx'], ENT_QUOTES, 'UTF-8');
+if (!empty($_POST['TLGRCIDx']) && is_numeric($_POST['TLGRCIDx'])) {
+	$TLGRCIDx = $_POST['TLGRCIDx'];
 } else {
-	$TLGRCIDx = '';
+	$TLGRCIDx = 0;
 }
 if (!empty($_POST['WARNCONSODx']) && is_numeric($_POST['WARNCONSODx'])) {
 	$WARNCONSODx = $_POST['WARNCONSODx'];
@@ -244,7 +244,7 @@ if ($bntsubmit == "Test mail") {
 	curl_setopt($ch, CURLOPT_HTTPHEADER, array("Content-Type: application/json"));
 	$output = curl_exec($ch);
 	curl_close($ch);
-
+	$output = json_decode($output, true);
 	if ($output['ok']) {
 		echo "
 <br><div align=center><font color='#228B22'><b>Push message send !</b></font>
@@ -256,10 +256,12 @@ if ($bntsubmit == "Test mail") {
 		echo "
       <br><div align=center><br><font color='#8B0000'><b>We encountered an error sending the message</b></font>
       <br>&nbsp;
-      <br>$output
+      <br>";
+      print_r($output);
+      echo "
+      <br>
       <br>&nbsp;
-      <br><INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'>
-            </div>";
+      <br><INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'></div>";
 	}
 } elseif ($bntsubmit == "Test command") {
 	if (file_exists('../scripts/metern.pid')) {
@@ -316,7 +318,11 @@ if ($bntsubmit == "Test mail") {
 			$datareturn = 'null';
 		}
 		echo "
-<br><div align=center><b>Command</b> : $LIVECOMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>, the correct format is $LIDx(1234.5*$LIVEUNITx)
+<br><div align=center><b>Command</b> : $LIVECOMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
+		if ($DATASET=='IEC62056') {
+			echo ", the correct format is $LIDx(1234.5*$LIVEUNITx)";
+		}
+echo "
 <br>
 <br>
 <INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'>
@@ -355,7 +361,7 @@ if(!defined('checkaccess')){die('Direct access not permitted');}
 \$POAKEY$met_numx='$POAKEYx';
 \$POUKEY$met_numx='$POUKEYx';
 \$TLGRTOK$met_numx='$TLGRTOKx';
-\$TLGRCID$met_numx='$TLGRCIDx';
+\$TLGRCID$met_numx=$TLGRCIDx;
 \$WARNCONSOD$met_numx=$WARNCONSODx;
 \$NORESPM$met_numx=$NORESPMx;
 

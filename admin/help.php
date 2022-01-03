@@ -71,7 +71,7 @@ echo "
 </td></tr>
 <tr><td valign='top'><b>Checking PHP :</b><br>
 ";
-echo 'PHP version: ' . phpversion() . '<br>';
+echo "PHP version: <a href='phpinfo.php'>" . phpversion() . '</a><br>';
 $input = '{ "jsontest" : " <br>Json extension loaded" }';
 $val   = json_decode($input, true);
 if ($val["jsontest"] != "") {
@@ -91,15 +91,33 @@ if (!extension_loaded('curl')) {
 }
 $ndday = date($DATEFORMAT . " H:i:s", $nowUTC);
 echo "<br><br>You timezone is set to $DTZ ($ndday)";
+if (ini_get('open_basedir')) {
+	echo '<br> open_basedir restriction set in php.ini ' . ini_get('open_basedir');
+} else {
+	echo '<br> No open_basedir restriction set in php.ini';
+}
 if (ini_get('sendmail_path')) {
 	echo '<br>Your sendmail_path is set to ' . ini_get('sendmail_path');
 } else {
 	echo '<br>Your sendmail_path is NOT set';
 }
-if (ini_get('open_basedir')) {
-	echo '<br>open_basedir is set to ' . ini_get('open_basedir');
-}
 echo "
+</td></tr>
+<tr><td valign='top'><b>/var/lock permissions :</b><br>";
+$datareturn = file_put_contents('/var/lock/test', 'test');
+$alt = substr(sprintf('%o', fileperms('/var/lock')), -4);
+if ($datareturn) {
+	echo "<img src='../images/24/sign-check.png' width=24 height=24 border=0 alt='$alt'> ok to write";
+	unlink('/var/lock/test');
+} else {
+	echo "<img src='../images/24/sign-error.png' width=24 height=24 border=0 alt='$alt'> -NOT- OK to write";
+}
+$whoami = exec('whoami'); 
+$CURDIR = dirname(dirname(__FILE__));
+echo "<br><br>Some distros have 755 by default, some application need to write port lock in there.
+<br>Change permissions to 777 (e.g. 'cp /usr/lib/tmpfiles.d/legacy.conf /etc/tmpfiles.d/' and 'nano /etc/tmpfiles.d/legacy.conf') and reboot.
+</td></tr>
+<tr><td valign='top'><b>Files permissions :</b> <a href='fperms.php'>$CURDIR files should be owned by $whoami user</a>
 </td></tr>
 <tr><td valign='top'><b>Hardware and communication apps. rights :</b><br>
 <br><b>Grant the permission to execute your com. apps.</b> Locate them with 'whereis mycomapp' and 'chmod a+x /pathto/mycomapp.py'.<br>
@@ -111,19 +129,7 @@ echo "$datareturn
 <br>The peripherals are usually owned by the uucp or dialout group, check (e.g. 'ls -al /dev/ttyUSB0'), add your user to the group: (e.g. 'usermod -a -G uucp $whoami')<br><br>";
 echo "<b>Since PHP 7.4 there is hardening options</b>.";
 echo ' Current version is ' . PHP_VERSION;
-echo ". Allow to use your com. devices by setting to PrivateDevices=false in php-fpm.service. (e.g. systemctl edit --full php-fpm.service)
-<br>
-<br><b>/var/lock permissions</b> ";
-$datareturn = file_put_contents('/var/lock/test', 'test');
-$alt = substr(sprintf('%o', fileperms('/var/lock')), -4);
-if ($datareturn) {
-	echo "<img src='../images/24/sign-check.png' width=24 height=24 border=0 alt='$alt'> ok to write";
-	unlink('/var/lock/test');
-} else {
-	echo "<img src='../images/24/sign-error.png' width=24 height=24 border=0 alt='$alt'> -NOT- OK to write";
-}
-echo "<br> Some distros have 755 by default, some application need to write port lock in there.
-<br>Change permissions to 777 (e.g. 'cp /usr/lib/tmpfiles.d/legacy.conf /etc/tmpfiles.d/' and 'nano /etc/tmpfiles.d/legacy.conf') and reboot.
+echo ". Allow to use your com. devices by setting PrivateDevices=false in php-fpm.service. (e.g. 'systemctl edit --full php-fpm.service')
 <br>
 <br> After change you need to restart php and your webserver. (e.g. 'systemctl restart php-fpm' and 'systemctl restart nginx')
 </td>
@@ -146,14 +152,18 @@ echo "</textarea>
 <tr><td>
 <b>Memory ($MEMORY) :</b>
 <br>";
+if (file_exists($MEMORY)) {
 $data     = file_get_contents($MEMORY);
 $array   = json_decode($data, true);
 print_r($array);
+}
 echo "<br><b>Live ($LIVEMEMORY) :</b>
 <br>";
+if (file_exists($LIVEMEMORY)) {
 $data     = file_get_contents($LIVEMEMORY);
 $array   = json_decode($data, true);
 print_r($array);
+}
 echo "<br><b>Indicators ($ILIVEMEMORY) :</b>
 <br>";
 if (file_exists($ILIVEMEMORY)) {

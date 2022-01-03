@@ -45,17 +45,19 @@ $(document).ready(function()
 function updateit() {
 $.getJSON('programs/programlive.php', function(json){
 CTOT=0;
-PTOT=0;";
+PTOT=0;
+SCTOT=0;
+SDTOT=0;";
 
 $housecons = false;
 $houseprod = false;
+$housestor = false;
 $grid      = array();
 for ($i = 1; $i <= $NUMMETER; $i++) {
     include "config/config_met$i.php";
     if (!isset($grid[${'PHASE' . $i}]) && ${'TYPE' . $i} == 'Elect' && ${'PROD' . $i} != 0) {
         $grid[${'PHASE' . $i}] = ${'PHASE' . $i}; // grid value on ph n
         echo "
-G${'PHASE'.$i}=0;
 C${'PHASE'.$i}=0;
 P${'PHASE'.$i}=0;
 ";
@@ -71,7 +73,7 @@ val$i = 0;
 val$i = parseFloat(val$i);
 }
 ";
-        if (${'PROD' . $i} == 2) {
+        if (${'PROD' . $i} == 2) { // on ph n
             $housecons = true;
             echo "CTOT+=val$i;
 C${'PHASE'.$i}+=val$i;
@@ -80,8 +82,20 @@ C${'PHASE'.$i}+=val$i;
             $houseprod = true;
             echo "PTOT+=val$i;
 P${'PHASE'.$i}+=val$i;
-"; // production on ph n
+"; 
+        } elseif (${'PROD' . $i} == 3) {
+            $housestor = true;
+            echo "SCTOT+=val$i;
+SC${'PHASE'.$i}+=val$i;
+"; 
         }
+        elseif (${'PROD' . $i} == 4) {
+            $housestor = true;
+            echo "SDTOT+=val$i;
+SD${'PHASE'.$i}+=val$i;
+"; 
+        }
+        
     }
 }
 
@@ -275,20 +289,17 @@ document.getElementById('rSTAMP').innerHTML = json['stamp'];
 
 if ($NUMIND > 0) { // indicators
     echo "
-$.getJSON('programs/programindicator.php', function(json){
-";
+$.getJSON('programs/programindicator.php', function(json){";
     for ($i = 1; $i <= $NUMIND; $i++) {
         echo "
-ival$i =json['${'INDNAME'.$i}$i'];
-";
+	ival$i =json['${'INDNAME'.$i}$i'];";
         if (!empty(${'INDCOMMAND' . $i})) {
-            echo "
-if (typeof ival$i === 'undefined') {
-    document.getElementById('rival$i').innerHTML = 'err';
-} else {
-    document.getElementById('rival$i').innerHTML = formatNum(ival$i);
-}
-";
+        echo "
+	if (typeof ival$i === 'undefined') {
+		document.getElementById('rival$i').innerHTML = 'err';
+	} else {
+		document.getElementById('rival$i').innerHTML = formatNum(ival$i);
+	}";
         } 
     }
     echo "})";
@@ -297,15 +308,12 @@ echo "
 } // updateit
 
 function updateit60() {
-$.getJSON('programs/programtotal.php', function(json){
-";
+$.getJSON('programs/programtotal.php', function(json){";
 for ($i = 1; $i <= $NUMMETER; $i++) {
     if (!empty(${'COMMAND' . $i}) && !${'SKIPMONITORING' . $i}) {
-        echo "Totalcounter$i =json['Totalcounter$i'];
-document.getElementById('rtval$i').innerHTML = Totalcounter$i;
-Dailycounter$i =json['Dailycounter$i'];
-document.getElementById('dayval$i').innerHTML = Dailycounter$i;
-";
+        echo "
+	document.getElementById('rtval$i').innerHTML = json['Totalcounter$i'];
+	document.getElementById('dayval$i').innerHTML = json['Dailycounter$i'];";
     } else {
         echo "document.getElementById('rtval$i').innerHTML = '--- ';
 document.getElementById('dayval$i').innerHTML = '--- ';

@@ -28,13 +28,13 @@ while (true) { // To infinity ... and beyond!
 
 				if (${'comlost' . $metnum} && ${'NORESPM' . $metnum}) {
 					${'comlost' . $metnum} = false;
-					$stringData            = "$now\tConnection with #$metnum ${'METNAME'.$metnum} restored\n\n";
-					logevents($stringData);
+					$now = date($DATEFORMAT . ' H:i:s');
+					logevents("$now\tConnection with #$metnum ${'METNAME'.$metnum} restored\n\n");
 					if (!empty(${'POAKEY' . $metnum}) && !empty(${'POUKEY' . $metnum})) {
-						$pushover = pushover(${'POAKEY' . $metnum}, ${'POUKEY' . $metnum}, "#metnum ${'METNAME' . $metnum} Warning", $stringData);
+						$pushover = pushover(${'POAKEY' . $metnum}, ${'POUKEY' . $metnum}, "#metnum ${'METNAME' . $metnum} Warning", "Connection with ${'METNAME'.$metnum} restored\n\n");
 					}
 					if (!empty(${'TLGRTOK' . $metnum}) && !empty(${'TLGRCID' . $metnum})) {
-						$telegram = telegram(${'TLGRTOK' . $metnum}, ${'TLGRCID' . $metnum}, "meterN $stringData");
+						$telegram = telegram(${'TLGRTOK' . $metnum}, ${'TLGRCID' . $metnum}, "meterN Connection with #$metnum ${'METNAME'.$metnum} restored\n\n");
 					}
 				}
 				if ($logc[$metnum]) {
@@ -57,8 +57,6 @@ while (true) { // To infinity ... and beyond!
 		$livememarray["${'METNAME'.$metnum}$metnum"] = $val; // Live value
 
 		$minute   = date('i');
-		$fiveflag = (bool) $memarray['5minflag'];
-
 		if (in_array($minute, $minlist) && !$memarray['5minflag']) { // 5 min jobs
 			$memarray['5minflag'] = true;
 			$today                = date('Ymd');
@@ -84,36 +82,42 @@ while (true) { // To infinity ... and beyond!
 						$now = date($DATEFORMAT . ' H:i:s');
 						if (${'NORESPM' . $i} && !${'comlost' . $i}) {
 							${'comlost' . $i} = true;
-							$stringData       = "$now\tConnection lost with #$i ${'METNAME'.$i}, missing 5' sample\n\n";
-							logevents($stringData);
+							logevents("$now\tConnection lost with #$i ${'METNAME'.$i}, missing 5' sample\n\n");
 							if (!empty(${'POAKEY' . $i}) && !empty(${'POUKEY' . $i})) {
-								$pushover = pushover(${'POAKEY' . $i}, ${'POUKEY' . $i}, "#i ${'METNAME' . $i} Warning", $stringData);
+								$pushover = pushover(${'POAKEY' . $i}, ${'POUKEY' . $i}, "#$i ${'METNAME' . $i} Warning", "Connection lost with ${'METNAME'.$i}, missing 5' sample\n\n");
 							}
 							if (!empty(${'TLGRTOK' . $i}) && !empty(${'TLGRCID' . $i})) {
-								$telegram = telegram(${'TLGRTOK' . $i}, ${'TLGRCID' . $i}, "meterN $stringData");
+								$telegram = telegram(${'TLGRTOK' . $i}, ${'TLGRCID' . $i}, "meterN Connection lost with #$i ${'METNAME'.$i}, missing 5' sample\n\n");
 							}
 						} else {
 							logevents("$now\tMissing #$i ${'METNAME'.$i} 5' sample\n\n");
 						}
 					}
 				}
-				if (${'TYPE' . $i} != 'Sensor' && $lastval<0) {
-					logevents("$now\tError #$i ${'METNAME'.$i} report a negative value\n\n");
-					$lastval='';
-				}
-
 				if ($i == 1) {
 					$PCtime      = date('H:i');
 					$stringData5 = "$PCtime";
 				}
 				$stringData5 .= ",$lastval";
-				$memarray["Last$i"] = round((float) $lastval, ${'PRECI' . $i});
+				
+				if (isset($lastval)) {
+					if (${'TYPE' . $i} != 'Sensor' && ($lastval < 0 || (${'PASSO' . $i} > 0 &&  $lastval > ${'PASSO' . $i}))) {
+						$now = date($DATEFORMAT . ' H:i:s');
+						logevents("$now\tError #$i ${'METNAME'.$i} report a wrong value\n\n");
+						$lastval='';
+					}				
+				
+					$memarray["Last$i"] = round((float) $lastval, ${'PRECI' . $i});
+					if (!isset($memarray["First$i"])) {
+					$memarray["First$i"] = $memarray["Last$i"];
+					}
+				} else {
+					$memarray["Last$i"] = null;
+				}
 			} // For each meters
 			$stringData5 .= "\r\n";
 
-			if (file_exists($DATADIR . "csv/$today.csv")) {
-				file_put_contents($DATADIR . "csv/$today.csv", $stringData5, FILE_APPEND);
-			} else { // Midnight or startup
+			if (!file_exists($DATADIR . "csv/$today.csv")) { // Midnight or startup
 				$yesterday = date('Ymd', time() - (60 * 60 * 24) + 30); // yesterday
 				if ($PCtime == '00:00' && file_exists($DATADIR . "csv/$yesterday.csv")) {
 					file_put_contents($DATADIR . "csv/$yesterday.csv", $stringData5, FILE_APPEND);
@@ -121,12 +125,15 @@ while (true) { // To infinity ... and beyond!
 
 				$stringData = "Time"; // Header line
 				for ($i = 1; $i <= $NUMMETER; $i++) {
-					$memarray["First$i"] = $memarray["Last$i"];
+					if (isset($memarray["Last$i"])) {
+						$memarray["First$i"] = $memarray["Last$i"];
+					} else {
+						$memarray["First$i"] = null;
+					}
 					$stringData .= ",${'METNAME'.$i}(${'UNIT'.$i})";
 					${'comlost' . $i} = false;
 				}
 				$stringData .= "\r\n";
-				$stringData .= "$stringData5";
 				file_put_contents($DATADIR . "csv/$today.csv", $stringData, FILE_APPEND);
 
 				$csvlist = glob($DATADIR . 'csv/*.csv');
@@ -220,7 +227,6 @@ while (true) { // To infinity ... and beyond!
 				$lines      = file('../data/events.txt');
 				$cnt        = count($lines);
 				if ($cnt >= $AMOUNTLOG) {
-					$now = date($DATEFORMAT . ' H:i:s');
 					array_splice($lines, $AMOUNTLOG);
 					$file2 = fopen('../data/events.txt', 'w');
 					fwrite($file2, implode('', $lines));
@@ -239,7 +245,8 @@ while (true) { // To infinity ... and beyond!
 				}
 				logevents($stringData . "\n\n");
 			} // Midnight
-
+			file_put_contents($DATADIR . "csv/$today.csv", $stringData5, FILE_APPEND);
+			
 			for ($i = 1; $i <= $NUMMETER; $i++) { // Consumption/production sensor check
 				$msgflag = (bool) $memarray["msgflag$i"];
 				if (!$msgflag && !empty($memarray["First$i"]) && !empty($memarray["Last$i"])) {
@@ -255,24 +262,28 @@ while (true) { // To infinity ... and beyond!
 
 					if ($val_last > ${'WARNCONSOD' . $i} && ${'WARNCONSOD' . $i} != 0 && !${'SKIPMONITORING' . $i}) {
 						$memarray["msgflag$i"] = true;
-
 						$now        = date($DATEFORMAT . ' H:i:s');
 						$val_last   = number_format($val_last, ${'PRECI' . $i}, $DPOINT, $THSEP);
-						$stringData = "$now\t#$i ${'METNAME'.$i} ";
+						$stringData = "#$i ${'METNAME'.$i} ";
 						if (${'PROD' . $i} == 1) {
 							$stringData .= "production have reached $val_last ${'UNIT'.$i}\n\n";
+							$msg = "Production have reached $val_last ${'UNIT'.$i}\n\n";
+							logevents("$now\t#$i ${'METNAME'.$i} production have reached $val_last ${'UNIT'.$i}\n\n");
 						} elseif (${'PROD' . $i} == 2) {
 							$stringData .= "consumption have reached $val_last ${'UNIT'.$i}\n\n";
+							$msg = "Consumption have reached $val_last ${'UNIT'.$i}\n\n";
+							logevents("$now\t#$i ${'METNAME'.$i} consumption have reached $val_last ${'UNIT'.$i}\n\n");
 						} else {
 							$stringData .= "have reached $val_last ${'UNIT'.$i}\n\n";
+							$msg = "Reached $val_last ${'UNIT'.$i}\n\n";
+							logevents("$now\t#$i ${'METNAME'.$i} have reached $val_last ${'UNIT'.$i}\n\n");							
 						}
-						logevents($stringData);
 
 						if (!empty(${'POAKEY' . $i}) && !empty(${'POUKEY' . $i})) {
-							$pushover = pushover(${'POAKEY' . $i}, ${'POUKEY' . $i}, "#i ${'METNAME' . $i} Warning", $stringData);
+							$pushover = pushover(${'POAKEY' . $i}, ${'POUKEY' . $i}, "#$i ${'METNAME' . $i} Warning", $msg);
 						}
 						if (!empty(${'TLGRTOK' . $i}) && !empty(${'TLGRCID' . $i})) {
-							$telegram = telegram(${'TLGRTOK' . $i}, ${'TLGRCID' . $i}, "meterN Warning $stringData");
+							$telegram = telegram(${'TLGRTOK' . $i}, ${'TLGRCID' . $i}, "meterN Warning #$i ${'METNAME'.$i} $msg");
 						}
 					}
 				}

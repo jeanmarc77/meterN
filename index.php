@@ -5,10 +5,11 @@
  * @package default
  */
 
-include 'styles/globalheader.php';
 include 'config/memory.php';
 if (!file_exists($MEMORY)) {
 	header('Location: admin/');
+} else {
+include 'styles/globalheader.php';
 }
 include 'config/config_main.php';
 include 'config/config_indicator.php';

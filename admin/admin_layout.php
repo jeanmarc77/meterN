@@ -82,7 +82,7 @@ echo "> W
 ";
 
 for ($i = 1; $i <= $NUMMETER; $i++) {
-	echo "<tr><td>#$i ${'METNAME'.$i}</td><td><input type='number' name='GRAPH_METx$i' value='${'GRAPH_MET'.$i}' min='0' max='8' style='width:40px' title='Set to 0 to hide'></td>
+	echo "<tr><td>#$i ${'METNAME'.$i}</td><td><input type='number' name='GRAPH_METx$i' value='${'GRAPH_MET'.$i}' min=0 max=16 style='width:40px' title='Set to 0 to hide'></td>
 <td><input type='checkbox' name='FILL_METx$i' value='true'";
 	if (${'FILL_MET' . $i}) {
 		echo " checked";

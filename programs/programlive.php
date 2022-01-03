@@ -5,6 +5,8 @@
  * @package default
  */
 
+$LIVEMEMORY  = '/dev/shm/mN_LIVEMEMORY.json';
+$ILIVEMEMORY = '/dev/shm/mN_ILIVEMEMORY.json';
 
 define('checkaccess', TRUE);
 include '../config/config_main.php';

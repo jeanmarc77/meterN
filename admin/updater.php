@@ -46,7 +46,7 @@ $error       = false;
 $log         = '';
 $destination = 'temp.tar.gz';
 
-$json   = file_get_contents('https://metern.org/latest_version.php');
+$json   = file_get_contents('https://raw.githubusercontent.com/jeanmarc77/meterN/main/other/latest_version.json');
 $data   = json_decode($json, true);
 $lastv  = $data['LASTVERSION'];
 $source = $data['LINK'];

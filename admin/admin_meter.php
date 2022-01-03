@@ -42,9 +42,6 @@ if (!empty($_POST['met_num'])) {
 	}
 }
 
-$householdprod  = false;
-$householdconso = false;
-
 if ($NUMMETER > 1) { //multi
 	echo "
 <br>
@@ -83,12 +80,6 @@ if ($NUMMETER > 1) { //multi
 			echo "<option value='$i'>";
 		}
 		echo "$i (${'METNAME'.$i})</option>";
-
-		if (${'PROD' . $i} == 1) {
-			$householdprod = true;
-		} elseif (${'PROD' . $i} == 2) {
-			$householdconso = true;
-		}
 	}
 	echo "
 </select>
@@ -106,8 +97,12 @@ if (file_exists("../config/config_met" . $met_num . ".php")) {
 }
 if (${'PROD' . $met_num} == 1) {
 	$prodconsu = 'production';
-} else {
+} else if (${'PROD' . $met_num} == 2) {
 	$prodconsu = 'consumption';
+} else if (${'PROD' . $met_num} == 3) {
+	$prodconsu = 'storage';
+} else {
+	$prodconsu = 'it';
 }
 echo "
 <div align=center><form action='admin_meter2.php' method='post'>
@@ -143,15 +138,19 @@ echo "</select>";
 if (${'TYPE' . $met_num} == 'Elect') {
 	echo "<select name='PRODx' onchange='this.form.submit()'>";
 	if (${'PROD' . $met_num} == 1) {
-		echo "<option SELECTED value=1>House production</option><option value=2>House consumption</option><option value=0>Other</option>";
+		echo "<option SELECTED value=1>House production</option><option value=2>House consumption</option><option value=3>House storage charge</option><option value=4>House storage discharge</option><option value=0>Other</option>";
 	} elseif (${'PROD' . $met_num} == 2) {
-		echo "<option value=1>House production</option><option SELECTED value=2>House consumption</option><option value=0>Other</option>";
+		echo "<option value=1>House production</option><option SELECTED value=2>House consumption</option><option value=3>House storage charge</option><option value=4>House storage discharge</option><option value=0>Other</option>";
+	} elseif (${'PROD' . $met_num} == 3) {
+		echo "<option value=1>House production</option><option value=2>House consumption</option><option value=3 SELECTED>House storage charge</option><option value=4>House storage discharge</option><option value=0>Other</option>";
+	} elseif (${'PROD' . $met_num} == 4) {
+		echo "<option value=1>House production</option><option value=2>House consumption</option><option value=3>House storage charge</option><option value=4 SELECTED>House storage discharge</option><option value=0>Other</option>";
 	} else {
-		echo "<option value=1>House production</option><option value=2>House consumption</option><option SELECTED value=0>Other</option>";
+		echo "<option value=1>House production</option><option value=2>House consumption</option><option value=3>House storage charge</option><option value=4>House storage discharge</option><option SELECTED value=0>Other</option>";
 	}
 	echo "</select>";
 
-	if (${'PROD' . $met_num} == 1 || ${'PROD' . $met_num} == 2) {
+	if (${'PROD' . $met_num} !=0) {
 		if (!isset(${'PHASE' . $met_num}) || ${'PHASE' . $met_num} == 0) {
 			${'PHASE' . $met_num} = 1;
 		}
@@ -269,7 +268,7 @@ User key <input type='text' size=42 name='POUKEYx' value='${'POUKEY'.$met_num}' 
 <tr>
 <td>
 Telegram <a href='https://telegram.me/botfather' target='_blank'><img src='../images/link.png' width='16' height='16' border=0></a> Bot token <input type='text' size=42 name='TLGRTOKx' value='${'TLGRTOK'.$met_num}' title='Leave empty to disable.'> </td>
-<td>Chat ID <input type='text' size=42 name='TLGRCIDx' value='${'TLGRCID'.$met_num}' title='Leave empty to disable.'> <input type='submit' name='bntsubmit' value='Test Telegram'></td>
+<td>Chat ID <input type='number' size=42 name='TLGRCIDx' value='${'TLGRCID'.$met_num}' title='Leave empty to disable.'> <input type='submit' name='bntsubmit' value='Test Telegram'></td>
 </tr>
 </table>
 </fieldset>

@@ -106,7 +106,7 @@ for ($i = 1; $i <= $NUMMETER; $i++) {
 }
 echo "
 </table>
-<br><img src='../images/24/sign-warning.png' width='24' height='24' border='0'><b> Beware : </b> This might interfere with -virtual(s)- meter(s) that use previous saved values.
+<br><img src='../images/24/sign-warning.png' width='24' height='24' border='0'><b> Beware : </b> Only realign real(s) meter(s) as it might interfere virtual(s) meter(s) that use previous saved values.
 <br><br>
 <INPUT TYPE='button' onClick=\"location.href='admin.php'\" value='Cancel'> <input type='submit' id='bntsubmit' name='bntsubmit' onclick=\"return confirm('Are you sure ?')\" value='Continue' disabled>
 </form></div>";
