@@ -1,5 +1,7 @@
 # meterN - Home energy monitor - (PHP/JS Energy Metering & Monitoring)
 
+[![meterN demo](https://i9.ytimg.com/vi/NkhmwVdqF7Q/mq1.jpg?sqp=CKDC1I4G&rs=AOn4CLCJuusUlMsAY1aVE3Fw9ByY4z8bpg)](https://youtu.be/NkhmwVdqF7Q "meterN demo")
+
 # What can meterN do for you ?
 meterN is a set of PHP/JS files that make a « Home energy metering & monitoring » solution. It accept any meters like : electrical, water, gas, fuel consumption, solar, wind energy production and so on .. 
 Sensors such as temperature or humidity are also accepted.
