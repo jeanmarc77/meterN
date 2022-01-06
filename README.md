@@ -21,7 +21,7 @@ Do not leave open the access of your website as it may reveal your house activit
 - Go then in your browser for configuration http://yourIP/metern/admin/
  
 # Support, Update & Contact
-To get support, updates or contact please go to https://github.com/jeanmarc77/meterN
+Check the wiki and the 'Help and debugger' section in the administration section. It usually respond to most common(s) issue(s).
 
 # License & External copyrights
 meterN is released under the GNU GPLv3 license (General Public License).
