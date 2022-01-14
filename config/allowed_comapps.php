@@ -1,4 +1,5 @@
 <?php
+if(!defined('checkaccess')){die('Direct access not permitted');}
 // For safety reason, manually complete this data array to permit mN to use those commands
 // Keep 'http' user file permission
 
