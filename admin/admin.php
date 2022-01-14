@@ -113,6 +113,33 @@ if ($cfgver < $CFGlay) {
 	$err_txt .= " config_indicator";
 	$err_cfg = true;
 }
+if (!file_exists('../config/allowed_comapps.php')) { // Create allowed_comapps for older mN versions
+	$myFile = '../config/allowed_comapps.php';
+	$fh = fopen($myFile, 'w+') or die("<font color='#8B0000'><b>Can't open $myFile file. Configuration not saved !</b></font>");
+	$stringData = "<?php
+if(!defined('checkaccess')){die('Direct access not permitted');}
+// For safety reason, manually complete this data array to permit mN to use those commands
+// Keep 'http' user file permission
+";
+	$j=1;
+	$h=0;
+	for ($i = 1; $i <= $NUMMETER; $i++) {
+		$stringData .= "\$ALLWDCMD[$h] = '${'COMMAND'.$j}';\n";
+		$h++;
+		$stringData .= "\$ALLWDCMD[$h] = '${'LIVECOMMAND'.$j}';\n";
+		$h++;
+		$j++;
+	}
+	$j=1;
+	for ($i = 1; $i <= $NUMIND; $i++) {
+		$stringData .= "\$ALLWDCMD[$h] = '${'INDCOMMAND'.$j}';\n";
+		$h++;
+		$j++;
+	}
+	$stringData .= '?>';
+	fwrite($fh, $stringData);
+	fclose($fh);
+}
 
 date_default_timezone_set($DTZ);
 
