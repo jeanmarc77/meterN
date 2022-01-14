@@ -6,7 +6,8 @@
  */
 
 
-include 'secure.php'
+include 'secure.php';
+include '../config/allowed_comapps.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -104,6 +105,8 @@ if (${'PROD' . $met_num} == 1) {
 } else {
 	$prodconsu = 'it';
 }
+$cnta = count($ALLWDCMD);
+
 echo "
 <div align=center><form action='admin_meter2.php' method='post'>
 <fieldset style='width:80%;'>
@@ -112,7 +115,7 @@ echo "
 <table border=0 cellspacing=5 cellpadding=0 width='100%' align='center'>
 <tr><td colspan=4><b>Specs :</b></td></tr>
 <tr><td>Short description name <input type='text' name='METNAMEx' value='${'METNAME'.$met_num}' size=10></td>
-<td>Color <input type='text' class=\"jscolor\" name='COLORx' value='${'COLOR'.$met_num}' maxlength=6 size=6></td>
+<td>Color <input data-jscolor='{hash:false}' name='COLORx' value='${'COLOR'.$met_num}' maxlength=6 size=6></td>
 <td>Type
 <select name='TYPEx' onchange='this.form.submit()'>";
 $TYPE_array = array(
@@ -177,7 +180,16 @@ echo "
 <tr><td colspan=6><b>Main 5min pooling :</b></td></tr>
 <tr><td>
 Meter ID <input type='text' name='IDx' value='${'ID'.$met_num}' required size=10>
-<td>Command <input type='text' name='COMMANDx' value='${'COMMAND'.$met_num}' size=25 required title='This command should return a quantity value (e.g.: Watts per hour)'> <input type='submit' name='bntsubmit' value='Test command' ";
+<td>Command <select name='COMMANDx'>";
+for ($i=0; $i<$cnta; $i++) {
+	echo "<option value='$ALLWDCMD[$i]'";
+	if (${'COMMAND'.$met_num} == $ALLWDCMD[$i]) {
+	echo ' SELECTED';
+	}
+	echo ">$ALLWDCMD[$i]</option>";
+}
+echo "<option value=''>disable</option></select>
+<input type='submit' name='bntsubmit' value='Test command' ";
 if (file_exists('../scripts/metern.pid')) {
 	echo "onclick=\"if(!confirm('meterN will be stopped for this test, continue ?')){return false;}\"";
 }
@@ -217,7 +229,16 @@ echo "${'UNIT'.$met_num}</td>
 <tr><td>
 Meter ID <input type='text' name='LIDx' value='${'LID'.$met_num}' size=10>
 </td>
-<td>Live command <input type='text' name='LIVECOMMANDx' value='${'LIVECOMMAND'.$met_num}' size=25 title='Leave empty to disable'> <input type='submit' name='bntsubmit' value='Test live command' ";
+<td>Live command <select name='LIVECOMMANDx'>";
+for ($i=0; $i<$cnta; $i++) {
+	echo "<option value='$ALLWDCMD[$i]'";
+	if (${'LIVECOMMAND'.$met_num} == $ALLWDCMD[$i]) {
+	echo ' SELECTED';
+	}
+	echo ">$ALLWDCMD[$i]</option>";
+}
+echo "<option value=''>disable</option></select>
+<input type='submit' name='bntsubmit' value='Test live command'";
 if (file_exists('../scripts/metern.pid')) {
 	echo "onclick=\"if(!confirm('meterN will be stopped for this test, continue ?')){return false;}\"";
 }

@@ -9,6 +9,7 @@
 include 'secure.php';
 include "../scripts/datasets/$DATASET.php";
 include '../scripts/version.php';
+include '../config/allowed_comapps.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -54,7 +55,7 @@ for ($ind_num = 1; $ind_num <= $NUMINDx; $ind_num++) {
 		} else {
 			$IDx = '';
 		}
-		if (!empty($_POST["COMMANDx$ind_num"]) && is_string($_POST["COMMANDx$ind_num"])) {
+		if (!empty($_POST["COMMANDx$ind_num"]) && is_string($_POST["COMMANDx$ind_num"]) && in_array($_POST["COMMANDx$ind_num"], $ALLWDCMD)) {
 			$COMMANDx = htmlspecialchars($_POST["COMMANDx$ind_num"], ENT_QUOTES, 'UTF-8');
 		} else {
 			$COMMANDx = '';
@@ -69,25 +70,26 @@ for ($ind_num = 1; $ind_num <= $NUMINDx; $ind_num++) {
 			$command = exec("kill -9 $pid > /dev/null 2>&1 &");
 			unlink('../scripts/metern.pid');
 		}
-		exec("$COMMANDx 2>&1", $datareturn);
-		$datareturn = trim(implode($datareturn));
-		$val        = isvalid($IDx, $datareturn);
-		if (isset($val)) {
-			echo "
-<br><div align=center>$datareturn <font color='#228B22'><b>is a valid entry !</b></font>
-";
+		echo '<br><div align=center>';
+		if (in_array($COMMANDx, $ALLWDCMD)) {
+			exec("$COMMANDx 2>&1", $datareturn);
+			$datareturn = trim(implode($datareturn));
+			$val        = isvalid($IDx, $datareturn);
+			if (isset($val)) {
+				echo "$datareturn <font color='#228B22'><b>is a valid entry !</b></font>>";
+			} else {
+				$COMMANDx = htmlentities($COMMANDx);
+				if (empty($datareturn)) {
+					$datareturn = 'null';
+				}
+				echo "<b>Command :</b> $COMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
+				if ($DATASET=='IEC62056') {
+					echo ", the correct format is $IDx(1234.5*$UNITx)";
+				}
+			}
 		} else {
-			$COMMANDx = htmlentities($COMMANDx);
-			if (empty($datareturn)) {
-				$datareturn = 'null';
-			}
-			echo "
-<br><div align=center><b>Command :</b> $COMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
-			if ($DATASET=='IEC62056') {
-				echo ", the correct format is $IDx(1234.5*$UNITx)";
-			}
+			echo "<b>Command :</b> $COMMANDx is set to disable or is not permitted. If so, manually complete config/allowed_comapps.php";
 		}
-
 	}
 }
 

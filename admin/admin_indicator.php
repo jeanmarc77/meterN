@@ -8,6 +8,7 @@
 
 include 'secure.php';
 include '../config/config_indicator.php';
+include '../config/allowed_comapps.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -60,7 +61,18 @@ for ($ind_num = 1; $ind_num <= $NUMIND; $ind_num++) {
 <tr>
 <td>Name <input type='text' name='INDNAMEx$ind_num' value='${'INDNAME'.$ind_num}' size=10></td>
 <td>ID <input type='text' name='IDx$ind_num' value='${'INDID'.$ind_num}' size=10></td>
-<td>Command <input type='text' name='COMMANDx$ind_num' value='${'INDCOMMAND'.$ind_num}' size=25 title='Leave empty to disable'> <input type='submit' name='bntsubmit$ind_num' value='Test command' ";
+<td>Command <select name='COMMANDx$ind_num'>";
+$cnt = count($ALLWDCMD);
+
+for ($i=0; $i<$cnt; $i++) {
+	echo "<option value='$ALLWDCMD[$i]'";
+	if (${'INDCOMMAND'.$ind_num} == $ALLWDCMD[$i]) {
+	echo ' SELECTED';
+	}
+	echo ">$ALLWDCMD[$i]</option>";
+}
+echo "<option value=''>disable</option></select>
+<input type='submit' name='bntsubmit$ind_num' value='Test command' ";
 	if (file_exists('../scripts/metern.pid')) {
 		echo "onclick=\"if(!confirm('meterN will be stopped for this test, continue ?')){return false;}\"";
 	}

@@ -9,6 +9,7 @@
 include 'secure.php';
 include '../scripts/version.php';
 include "../scripts/datasets/$DATASET.php";
+include '../config/allowed_comapps.php';
 ?>
 <!DOCTYPE html>
 <html>
@@ -66,7 +67,7 @@ if (!empty($_POST['IDx']) && is_string($_POST['IDx'])) {
 } else {
 	$IDx = '';
 }
-if (!empty($_POST['COMMANDx']) && is_string($_POST['COMMANDx'])) {
+if (!empty($_POST['COMMANDx']) && is_string($_POST['COMMANDx']) && in_array($_POST['COMMANDx'], $ALLWDCMD)) {
 	$COMMANDx = htmlspecialchars($_POST['COMMANDx'], ENT_QUOTES, 'UTF-8');
 } else {
 	$COMMANDx = '';
@@ -105,7 +106,7 @@ if (!empty($_POST['LIDx']) && is_string($_POST['LIDx'])) {
 } else {
 	$LIDx = '';
 }
-if (!empty($_POST['LIVECOMMANDx']) && is_string($_POST['LIVECOMMANDx'])) {
+if (!empty($_POST['LIVECOMMANDx']) && is_string($_POST['LIVECOMMANDx']) && in_array($_POST['LIVECOMMANDx'], $ALLWDCMD)) {
 	$LIVECOMMANDx = htmlspecialchars($_POST['LIVECOMMANDx'], ENT_QUOTES, 'UTF-8');
 } else {
 	$LIVECOMMANDx = '';
@@ -175,8 +176,6 @@ function testemail($adress) {
 	else
 		return 'false';
 }
-
-
 $Err = 'false';
 
 if ($bntsubmit == "Test mail") {
@@ -270,64 +269,60 @@ if ($bntsubmit == "Test mail") {
 		unlink('../scripts/metern.pid');
 		usleep(500000);
 	}
-	exec("$COMMANDx 2>&1", $datareturn);
-	$datareturn = trim(implode($datareturn));
-	$val        = isvalid($IDx, $datareturn);
-	if (isset($val) && is_numeric($val)) {
-		echo "
-<br><div align=center>$datareturn <font color='#228B22'><b>is a valid entry !</b></font>
-<br>
-<br>
-<INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'>
-</div>";
-	} else {
-		$COMMANDx = htmlentities($COMMANDx);
-		if (empty($datareturn)) {
-			$datareturn = 'null';
+	echo '<br><div align=center>';
+		if (in_array($COMMANDx, $ALLWDCMD)) {
+					exec("$COMMANDx 2>&1", $datareturn);
+					$datareturn = trim(implode($datareturn));
+					$val        = isvalid($IDx, $datareturn);
+					
+					if (isset($val) && is_numeric($val)) {
+						echo "<br><div align=center>$datareturn <font color='#228B22'><b>is a valid entry !</b></font>";
+					} else {
+						$COMMANDx = htmlentities($COMMANDx);
+						if (empty($datareturn)) {
+							$datareturn = 'null';
+						}
+						echo "<br><div align=center><b>Command :</b> $COMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
+						if ($DATASET=='IEC62056') {
+							echo ", the correct format is $IDx(1234.5*$UNITx)";
+						}
+					}
+		} else {
+			echo "<b>Command :</b> $COMMANDx is set to disable or is not permitted. If so, manually complete config/allowed_comapps.php";
 		}
-		echo "
-<br><div align=center><b>Command :</b> $COMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
-		if ($DATASET=='IEC62056') {
-			echo ", the correct format is $IDx(1234.5*$UNITx)";
-		}
-		echo "
-<br>
-<br>
-<INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'>
-</div>";
-	}
+	echo "<br><br><INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'></div>";		
 } elseif ($bntsubmit == "Test live command") {
 	if (file_exists('../scripts/metern.pid')) {
 		$pid     = (int) file_get_contents('../scripts/metern.pid');
 		$command = exec("kill -9 $pid > /dev/null 2>&1 &");
 		unlink('../scripts/metern.pid');
 	}
-	exec("$LIVECOMMANDx 2>&1", $datareturn);
-	$datareturn = trim(implode($datareturn));
-	$val        = isvalid($LIDx, $datareturn);
-	if (isset($val)) {
-		echo "
-<br><div align=center>$datareturn <font color='#228B22'><b>is a valid entry !</b></font>
-<br>
-<br>
-<INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'>
-</div>";
+	echo '<br><div align=center>';
+	if (in_array($LIVECOMMANDx, $ALLWDCMD)) {
+		exec("$LIVECOMMANDx 2>&1", $datareturn);
+		$datareturn = trim(implode($datareturn));
+		$val        = isvalid($LIDx, $datareturn);
+		if (isset($val)) {
+			echo "$datareturn <font color='#228B22'><b>is a valid entry !</b></font>";
+		} else {
+			$LIVECOMMANDx = htmlentities($LIVECOMMANDx);
+			if (empty($datareturn)) {
+				$datareturn = 'null';
+			}
+			echo "<b>Command</b> : $LIVECOMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
+			if ($DATASET=='IEC62056') {
+				echo ", the correct format is $LIDx(1234.5*$LIVEUNITx)";
+			}
+		}
 	} else {
-		$LIVECOMMANDx = htmlentities($LIVECOMMANDx);
-		if (empty($datareturn)) {
-			$datareturn = 'null';
-		}
-		echo "
-<br><div align=center><b>Command</b> : $LIVECOMMANDx <br><br>$datareturn <font color='#8B0000'><b>is not valid</b></font>";
-		if ($DATASET=='IEC62056') {
-			echo ", the correct format is $LIDx(1234.5*$LIVEUNITx)";
-		}
+		echo "<b>Command :</b> $LIVECOMMANDx is set to disable or is not permitted. If so, manually complete config/allowed_comapps.php";
+	}
 echo "
 <br>
 <br>
 <INPUT TYPE='button' onClick=\"location.href='admin_meter.php?met_num=$met_numx'\" value='Back'>
-</div>";
-	}
+</div>";	
+	
 } else {
 	if (!testemail($EMAILx)) {
 		echo "EMAIL is not correct<br>";
