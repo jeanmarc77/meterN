@@ -121,7 +121,7 @@ echo "<br><br>Some distros have 755 by default, some application need to write p
 </td></tr>
 <tr><td valign='top'><b>Hardware and communication apps. rights :</b><br>
 <br><b>Grant the permission to execute your com. apps.</b> Locate them with 'whereis mycomapp' and 'chmod a+x /pathto/mycomapp.py'.
-<br><b>Make a shortcut</b> 'ln -s /pathto/mycomapp.py /usr/bin/mycomapp'<br>
+<br><b>Make a shortcut</b> (e.g. 'ln -s /pathto/mycomapp.py /usr/bin/mycomapp')<br>
 <br><b>Allow the access the communication ports</b>
 <br>The peripherals are usually owned by the uucp or dialout group, check (e.g. 'ls -al /dev/ttyUSB0'), add your user to the group: (e.g. 'usermod -a -G uucp $whoami')";
 $whoami = exec('whoami');
