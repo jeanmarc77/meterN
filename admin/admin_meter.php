@@ -181,12 +181,17 @@ echo "
 <tr><td>
 Meter ID <input type='text' name='IDx' value='${'ID'.$met_num}' required size=10>
 <td>Command <select name='COMMANDx'>";
+$sel  = false;
 for ($i=0; $i<$cnta; $i++) {
 	echo "<option value='$ALLWDCMD[$i]'";
 	if (${'COMMAND'.$met_num} == $ALLWDCMD[$i]) {
 	echo ' SELECTED';
+	$sel  = true;
 	}
 	echo ">$ALLWDCMD[$i]</option>";
+}
+if (!$sel) {
+echo "<option disabled selected value=''>Set allowed com.app. in config/allowed_comapps.php</option>";
 }
 echo "<option value=''>disable</option></select>
 <input type='submit' name='bntsubmit' value='Test command' ";
@@ -230,12 +235,17 @@ echo "${'UNIT'.$met_num}</td>
 Meter ID <input type='text' name='LIDx' value='${'LID'.$met_num}' size=10>
 </td>
 <td>Live command <select name='LIVECOMMANDx'>";
+$sel  = false;
 for ($i=0; $i<$cnta; $i++) {
 	echo "<option value='$ALLWDCMD[$i]'";
 	if (${'LIVECOMMAND'.$met_num} == $ALLWDCMD[$i]) {
 	echo ' SELECTED';
+	$sel  = true;
 	}
 	echo ">$ALLWDCMD[$i]</option>";
+}
+if (!$sel) {
+echo "<option disabled selected value=''>Set allowed com.app. in config/allowed_comapps.php</option>";
 }
 echo "<option value=''>disable</option></select>
 <input type='submit' name='bntsubmit' value='Test live command'";

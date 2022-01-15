@@ -63,13 +63,17 @@ for ($ind_num = 1; $ind_num <= $NUMIND; $ind_num++) {
 <td>ID <input type='text' name='IDx$ind_num' value='${'INDID'.$ind_num}' size=10></td>
 <td>Command <select name='COMMANDx$ind_num'>";
 $cnt = count($ALLWDCMD);
-
+$sel  = false;
 for ($i=0; $i<$cnt; $i++) {
 	echo "<option value='$ALLWDCMD[$i]'";
 	if (${'INDCOMMAND'.$ind_num} == $ALLWDCMD[$i]) {
 	echo ' SELECTED';
+	$sel  = true;
 	}
 	echo ">$ALLWDCMD[$i]</option>";
+}
+if (!$sel) {
+echo "<option disabled selected value=''>Set allowed com.app. in config/allowed_comapps.php</option>";
 }
 echo "<option value=''>disable</option></select>
 <input type='submit' name='bntsubmit$ind_num' value='Test command' ";
