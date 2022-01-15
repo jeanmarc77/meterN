@@ -120,17 +120,17 @@ echo "<br><br>Some distros have 755 by default, some application need to write p
 <tr><td valign='top'><b>Files permissions :</b> <a href='fperms.php'>$CURDIR files should be owned by $whoami user</a>
 </td></tr>
 <tr><td valign='top'><b>Hardware and communication apps. rights :</b><br>
-<br><b>Grant the permission to execute your com. apps.</b> Locate them with 'whereis mycomapp' and 'chmod a+x /pathto/mycomapp.py'.<br>
-<br><b>Allow the access the communication ports as ";
+<br><b>Grant the permission to execute your com. apps.</b> Locate them with 'whereis mycomapp' and 'chmod a+x /pathto/mycomapp.py'.
+<br><b>Make a shortcut</b> 'ln -s /pathto/mycomapp.py /usr/bin/mycomapp'<br>
+<br><b>Allow the access the communication ports</b>
+<br>The peripherals are usually owned by the uucp or dialout group, check (e.g. 'ls -al /dev/ttyUSB0'), add your user to the group: (e.g. 'usermod -a -G uucp $whoami')";
 $whoami = exec('whoami');
-echo "$whoami user</b>. $whoami currently belong to those groups: ";
+echo "<br>You are '$whoami' user</b> which currently belong to those groups: ";
 $datareturn = exec("groups $whoami");
-echo "$datareturn
-<br>The peripherals are usually owned by the uucp or dialout group, check (e.g. 'ls -al /dev/ttyUSB0'), add your user to the group: (e.g. 'usermod -a -G uucp $whoami')<br><br>";
-echo "<b>Since PHP 7.4 there is hardening options</b>.";
+echo "$datareturn<br>";
+echo "<br><b>Since PHP 7.4 there is hardening options</b>.";
 echo ' Current version is ' . PHP_VERSION;
 echo ". Allow to use your com. devices by setting PrivateDevices=false in php-fpm.service. (e.g. 'systemctl edit --full php-fpm.service')
-<br>
 <br> After change you need to restart php and your webserver. (e.g. 'systemctl restart php-fpm' and 'systemctl restart nginx')
 </td>
 </tr>
