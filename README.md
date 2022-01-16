@@ -31,3 +31,5 @@ The GPLv3 license description can be found at http://www.gnu.org/licenses/gpl.ht
 Highcharts, the javascript charting library is free for non-commercial use only. (http://highcharts.com)<br>
  
 Small-n-flat icons CC0 1.0 Universal (http://paomedia.github.io/small-n-flat/)
+
+House icon Creative Commons (https://www.iconfinder.com/icons/299061/house_icon)
