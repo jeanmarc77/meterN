@@ -3,15 +3,15 @@
  ║                           - Home energy monitor -                           ║
  ║                      PHP/JS Energy Metering & Monitoring                    ║
  ║                                                                             ║
- ║             Version     : 1.2.3                                             ║
+ ║             Version     : 1.2.3.2                                           ║
  ║             Made by     : Louviaux Jean-Marc                                ║
- ║             Last Update : 02/02/20                                          ║
+ ║             Last Update : 06/01/22                                          ║
  ║                                                                             ║
  ╚═════════════════════════════════════════════════════════════════════════════╝
  
  What can meterN do for you ? ────────────────────────────────────────────────
 
-  meterN is a lightweight set of PHP/JS files that make a « Home energy metering & monitoring » solution. It accept any meters like : electrical, water, gas, fuel consumption, solar, wind energy production and so on .. 
+  meterN is a set of PHP/JS files that make a « Home energy metering & monitoring » solution. It accept any meters like : electrical, water, gas, fuel consumption, solar, wind energy production and so on .. 
   Sensors such as temperature or humidity are also accepted.
     
  Prerequisites ───────────────────────────────────────────────────────────────
@@ -45,5 +45,3 @@
   Highcharts, the javascript charting library is free for non-commercial use only. (http://highcharts.com)
   
   Small-n-flat icons CC0 1.0 Universal (http://paomedia.github.io/small-n-flat/)
-
-
