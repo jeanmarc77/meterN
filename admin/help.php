@@ -9,6 +9,7 @@
 include 'secure.php';
 include '../scripts/version.php';
 include '../config/memory.php';
+include '../config/allowed_comapps.php';
 date_default_timezone_set($DTZ);
 $nowUTC = strtotime(date("Ymd H:i:s"));
 ?>
@@ -134,6 +135,14 @@ echo ". Allow to use your com. devices by setting PrivateDevices=false in php-fp
 <br> After change you need to restart php and your webserver. (e.g. 'systemctl restart php-fpm' and 'systemctl restart nginx')
 </td>
 </tr>
+<tr><td>
+<b>Allowed communication apps :</b><br>";
+$cnta = count($ALLWDCMD);
+for ($i=0; $i<$cnta; $i++) {
+	echo "\"$ALLWDCMD[$i]\" ";
+}
+echo "<br><br>Edit config/allowed_comapps.php file to define.
+</td></tr>
 <tr><td>
 <b>Log error file :</b><br>";
 if (!$DEBUG) {
