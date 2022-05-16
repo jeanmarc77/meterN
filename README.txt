@@ -3,9 +3,9 @@
  ║                           - Home energy monitor -                           ║
  ║                      PHP/JS Energy Metering & Monitoring                    ║
  ║                                                                             ║
- ║             Version     : 1.2.3.2                                           ║
+ ║             Version     : 1.2.3.3                                           ║
  ║             Made by     : Louviaux Jean-Marc                                ║
- ║             Last Update : 06/01/22                                          ║
+ ║             Last Update : 16/05/22                                          ║
  ║                                                                             ║
  ╚═════════════════════════════════════════════════════════════════════════════╝
  
