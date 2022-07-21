@@ -90,6 +90,9 @@ if (!extension_loaded('curl')) {
 } else {
 	echo "<img src='../images/24/sign-check.png' width=24 height=24 border=0> Curl extension loaded ";
 }
+echo "<br><br><b>Since PHP 7.4 there is hardening options</b><br>
+Allow to use your com. devices by setting PrivateDevices=false in php-fpm.service. (e.g. 'systemctl edit --full php-fpm.service')
+<br> After change you need to restart php and your webserver. (e.g. 'systemctl restart php-fpm' and 'systemctl restart nginx')";
 $ndday = date($DATEFORMAT . " H:i:s", $nowUTC);
 echo "<br><br>You timezone is set to $DTZ ($ndday)";
 if (ini_get('open_basedir')) {
@@ -128,11 +131,7 @@ echo "<br><br>Some distros have 755 by default, some application need to write p
 $whoami = exec('whoami');
 echo "<br>You are '$whoami' user</b> which currently belong to those groups: ";
 $datareturn = exec("groups $whoami");
-echo "$datareturn<br>";
-echo "<br><b>Since PHP 7.4 there is hardening options</b>.";
-echo ' Current version is ' . PHP_VERSION;
-echo ". Allow to use your com. devices by setting PrivateDevices=false in php-fpm.service. (e.g. 'systemctl edit --full php-fpm.service')
-<br> After change you need to restart php and your webserver. (e.g. 'systemctl restart php-fpm' and 'systemctl restart nginx')
+echo "$datareturn<br>
 </td>
 </tr>
 <tr><td>
