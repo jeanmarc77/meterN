@@ -1,12 +1,13 @@
 <?php
 /**
- * /srv/http/metern/scripts/distros/raspbian_ARM.php
+ * /srv/http/123solar/scripts/distros/raspbian_ARM.php
  *
  * @package default
  */
 
 
 // Commands
+$PSCMD='ps -ef';
 $UPTIME="uptime -p";
 $CPUUSE="ps aux|awk -v nproc=`nproc` 'NR > 0 { s +=$3 }; END {print s/nproc}'";
 $MEMTOT="free -m | grep 'Mem' | awk '{print $2}'";
