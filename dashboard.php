@@ -225,7 +225,7 @@ if (typeof GRIDTOT === 'undefined') {
     } else {
     document.getElementById('rGRIDTOT').style.color = '#8B0000';
     }
-    document.getElementById('rGRIDTOT').innerHTML = GRIDTOT + 'W';
+    document.getElementById('rGRIDTOT').innerHTML = GRIDTOT + ' W';
 }
 ";
 }
@@ -368,7 +368,7 @@ if ($houseprod || $housecons) {
     </td>
     <td align='center' width='150'><img src='images/house96.png' width='96' height='96'>";
     if ($housecons) {
-        echo "<br><b><font size='+1'><span id='rCTOT'>--</span>W</font></b>";
+        echo "<br><b><font size='+1'><span id='rCTOT'>--</span> W</font></b>";
     }
     if ($houseprod && $housecons) {
         echo "<br><font size='-1'>(<span id='rGR'>-</span>% $lgAUTONOM)</font>";
@@ -377,7 +377,7 @@ if ($houseprod || $housecons) {
     </td>
     <td align='center'>";
     if ($houseprod) {
-        echo "<br><br><span id='rPTOT'>--</span>W<br>
+        echo "<br><br><span id='rPTOT'>--</span> W<br>
         <div class='lds-ellipsis' id='plds'><div id='plds1'></div><div id='plds2'></div><div id='plds3'></div><div id='plds4'></div></div>";
     }
     echo "
@@ -423,13 +423,13 @@ echo "
 for ($i = 1; $i <= $NUMMETER; $i++) {
     echo "<tr align='center'>
 <th width='25%'>";
-    echo "<b>${'METNAME'.$i}</b></th><th width='25%'><b><span id='rval$i'>--</span>${'LIVEUNIT'.$i}</b></th><th width='25%'><span id='dayval$i'>--</span>";
+    echo "<b>${'METNAME'.$i}</b></th><th width='25%'><b><span id='rval$i'>--</span> ${'LIVEUNIT'.$i}</b></th><th width='25%'><span id='dayval$i'>--</span>";
     if (${'TYPE' . $i} != 'Sensor') {
         echo "${'UNIT'.$i}";
     }
     echo "</th><th width='25%'><span id='rtval$i'>--</span>";
     if (${'TYPE' . $i} != 'Sensor') {
-        echo "${'UNIT'.$i}";
+        echo " ${'UNIT'.$i}";
     }
     echo "</th></tr>";
 }
@@ -446,7 +446,7 @@ if ($NUMIND > 0) { // indicators
        if (!empty(${'INDCOMMAND' . $i})) {
         echo "<tr align='center'>
 <th width='25%'>";
-            echo "<b>${'INDNAME'.$i}</b></th><th width='25%'><span id='rival$i'>--</span>${'INDUNIT'.$i}</b></th></tr>";
+            echo "<b>${'INDNAME'.$i}</b></th><th width='25%'><span id='rival$i'>--</span> ${'INDUNIT'.$i}</b></th></tr>";
         }
     }
     echo "

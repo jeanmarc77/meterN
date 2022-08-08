@@ -158,9 +158,9 @@ var Mychart, options = {
 		}
 		echo "(this.series.index==$y) {\n";
 		if (${'TYPE' . $metlist[$y]} == 'Elect') {
-			echo "\t\t\t\t\t\treturn Highcharts.numberFormat(this.y,2) + 'kWh';\n";
+			echo "\t\t\t\t\t\treturn Highcharts.numberFormat(this.y,2) + ' kWh';\n";
 		} else {
-			echo "\t\t\t\t\t\treturn Highcharts.numberFormat(this.y,${'PRECI'. $metlist[$y]}) + '${'UNIT'. $metlist[$y]}';\n";
+			echo "\t\t\t\t\t\treturn Highcharts.numberFormat(this.y,${'PRECI'. $metlist[$y]}) + ' ${'UNIT'. $metlist[$y]}';\n";
 		}
 		echo "\t\t\t\t\t\t}";
 		$y++;
@@ -205,12 +205,12 @@ var Mychart, options = {
 		}
 		echo "(this.series.index==$y) {\n";
 		if (${'TYPE' . $metlist[$y]} == 'Elect') {
-			echo "\t\t\t\ts+= '<b>'+ Highcharts.numberFormat(this.y,2) + 'kWh</b>';\n";
+			echo "\t\t\t\ts+= '<b>'+ Highcharts.numberFormat(this.y,2) + ' kWh</b>';\n";
 			if (${'PRICE' . $metlist[$y]} > 0) {
 				echo "\t\t\t\ts += ' (' + Highcharts.numberFormat((this.y*${'PRICE'. $metlist[$y]}),1) + '$CURS)';\n";
 			}
 		} else {
-			echo "\t\t\t\ts+= '<b>'+ Highcharts.numberFormat(this.y,${'PRECI'. $metlist[$y]}) + '${'UNIT'. $metlist[$y]}</b>';\n";
+			echo "\t\t\t\ts+= '<b>'+ Highcharts.numberFormat(this.y,${'PRECI'. $metlist[$y]}) + ' ${'UNIT'. $metlist[$y]}</b>';\n";
 			if (${'PRICE' . $metlist[$y]} > 0) {
 				echo "\t\t\t\ts += ' (' + Highcharts.numberFormat((this.y*${'PRICE'. $metlist[$y]}),1) + '$CURS)';\n";
 			}

@@ -174,14 +174,14 @@ for ($meter = 0; $meter < $metcnt; $meter++) { // each meter
 			$title = "${'METNAME'.$nummeter} $year: ";
 			if (${'TYPE' . $nummeter} == 'Elect') {
 				$title .= number_format($conso_y[$year][$meter], 3, $DPOINT, $THSEP);
-				$title .= 'kWh';
+				$title .= ' kWh';
 			} else {
 				$title .= number_format($conso_y[$year][$meter], ${'PRECI' . $nummeter}, $DPOINT, $THSEP);
-				$title .= "${'UNIT'.$nummeter}";
+				$title .= " ${'UNIT'.$nummeter}";
 			}
 			if (${'PRICE' . $nummeter} > 0) {
 				$money = number_format(($conso_y[$year][$meter] * ${'PRICE' . $nummeter}), 1, $DPOINT, $THSEP);
-				$title .= "/$money $CURS";
+				$title .= " ($money"."$CURS)";
 			}
 		} else {
 			$title = "$lgCONSUTITLE $year";
@@ -215,7 +215,7 @@ for ($i = 0; $i < $yearscnt; $i++) { // years
 				}
 				if (${'PRICE' . $nummeter} > 0) {
 					$money = number_format(($conso_m[$year][$h][$meter] * ${'PRICE' . $nummeter}), 1, $DPOINT, $THSEP);
-					$title .= "/$money $CURS";
+					$title .= " ($money"."$CURS)";
 				}
 			} else {
 				$title = "$lgCONSUTITLE $lgMONTH[$h] $year";

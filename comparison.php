@@ -240,9 +240,9 @@ yAxis: [{
 min: 0,
 labels: { formatter: function() { return this.value +";
 if (${'TYPE' . $metnum} != 'Elect') {
-	echo "'${'UNIT' . $metnum}';}},";
+	echo "' ${'UNIT' . $metnum}';}},";
 } else {
-	echo "'kWh';}},";
+	echo "' kWh';}},";
 }
 echo "
 title: { text: '$lgCUMVAL'}
@@ -254,9 +254,9 @@ formatter: function() {
   var s = '';
   s += '<b>' + Highcharts.dateFormat('%A %e %b %Y',this.x) + ' :</b> ' + Highcharts.numberFormat(this.y,'${'PRECI' . $metnum}') +";
 if (${'TYPE' . $metnum} != 'Elect') {
-	echo " '${'UNIT' . $metnum}<br/>'";
+	echo " ' ${'UNIT' . $metnum}<br/>'";
 } else {
-	echo " 'kWh<br/>'";
+	echo " ' kWh<br/>'";
 }
 echo "
   var secondSeriesLen =  Mychart.series[1].data.length;
@@ -275,9 +275,9 @@ echo "
    } else {
       return '<b>' + Highcharts.dateFormat('%A %e %b %Y',this.x) + ' :</b> ' + Highcharts.numberFormat(this.y,'${'PRECI' . $metnum}') + ";
 if (${'TYPE' . $metnum} != 'Elect') {
-	echo " '${'UNIT' . $metnum}<br/>'";
+	echo " ' ${'UNIT' . $metnum}<br/>'";
 } else {
-	echo " 'kWh<br/>'";
+	echo " ' kWh<br/>'";
 }
 echo "
    }

@@ -306,11 +306,11 @@ formatter: function() {
 		} else {
 			echo ' else if';
 		}
-		echo "(this.series.name=='${'METNAME'.$j}') { return '<b>' + Highcharts.numberFormat(this.y,'${'PRECI'.$j}') + '${'UNIT'.$j}' + '</b>";
+		echo "(this.series.name=='${'METNAME'.$j}') { return '<b>' + Highcharts.numberFormat(this.y,'${'PRECI'.$j}') + ' ${'UNIT'.$j}' + '</b>";
 		if (${'TYPE' . $j} != 'Elect') {
 			echo "<br>' + Highcharts.dateFormat('%a %e %b %H:%M', this.x) }";
 		} else {
-			echo " ~' + Highcharts.numberFormat(this.y*12,'0') + 'W' + '$lgAVG<br>' + Highcharts.dateFormat('%a %e %b %H:%M', this.x)}";
+			echo " ~' + Highcharts.numberFormat(this.y*12,'0') + ' W' + '$lgAVG<br>' + Highcharts.dateFormat('%a %e %b %H:%M', this.x)}";
 		}
 	}
 	echo "
@@ -412,9 +412,9 @@ tooltip: {
 		echo "(this.series.name=='${'METNAME'.$j}') {
       return Highcharts.dateFormat('%A %d %B', this.x) + '<br>'+ this.series.name + ' <b>' +";
 		if (${'TYPE' . $j} == 'Elect') {
-			echo "Highcharts.numberFormat(this.y,2) + 'k${'UNIT'.$j}' + '</b>'";
+			echo "Highcharts.numberFormat(this.y,2) + ' k${'UNIT'.$j}' + '</b>'";
 		} else {
-			echo "Highcharts.numberFormat(this.y,'${'PRECI'.$j}') + '${'UNIT'.$j}' + '</b>'";
+			echo "Highcharts.numberFormat(this.y,'${'PRECI'.$j}') + ' ${'UNIT'.$j}' + '</b>'";
 		}
 		if (${'PRICE' . $j} > 0) {
 			echo " + ' (' + Highcharts.numberFormat((this.y*${'PRICE'.$j}),1) + '$CURS)'";
