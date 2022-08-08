@@ -187,7 +187,7 @@ if (file_exists("../data/csv/$date1")) {
 				'type' => 'areaspline',
 				'color' => $color[$j],
 				'dashStyle' => 'Solid',
-				'val24' => "($val_last24[$i] ${'UNIT' . $i})"
+				'val24' => "($val_last24[$i]${'UNIT' . $i})"
 			);
 			$j++;
 		}

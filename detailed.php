@@ -152,9 +152,9 @@ for ($i = 1; $i <= $NUMMETER; $i++) {
 		echo " else if";
 	}
 	echo "(this.series.name=='${'METNAME'.$i}') {
-return '<b>' + Highcharts.numberFormat(this.y,'${'PRECI'.$i}') + ' ${'UNIT'.$i} </b>'";
+return '<b>' + Highcharts.numberFormat(this.y,'${'PRECI'.$i}') + '${'UNIT'.$i} </b>'";
 	if (${'TYPE' . $i} == 'Elect' && $cumul != 'on') {
-		echo " + '~' + Highcharts.numberFormat(this.y*12,'0') + 'W $lgAVG'";
+		echo " + '~' + Highcharts.numberFormat(this.y*12,'0') + 'W$lgAVG'";
 	}
 	echo "+ '<br>' + Highcharts.dateFormat('%H:%M', this.x)
 }";
