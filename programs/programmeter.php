@@ -219,7 +219,7 @@ if ($cnt > 0) {
 			} else {
 				$money[$i] = number_format(($val_last24[$i] * ${'PRICE' . $i}), 2, $DPOINT, $THSEP);
 			}
-			$money[$i] = "($money[$i] $CURS)";
+			$money[$i] = "($money[$i]"."$CURS)";
 		} else {
 			$money[$i] = '';
 		}
