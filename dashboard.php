@@ -429,7 +429,7 @@ for ($i = 1; $i <= $NUMMETER; $i++) {
     }
     echo "</th><th width='25%'><span id='rtval$i'>--</span>";
     if (${'TYPE' . $i} != 'Sensor') {
-        echo " ${'UNIT'.$i}";
+        echo "${'UNIT'.$i}";
     }
     echo "</th></tr>";
 }

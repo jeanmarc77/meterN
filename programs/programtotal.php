@@ -32,7 +32,7 @@ if (file_exists($MEMORY)) {
 				$val_tot = number_format($memarray["Last$i"], ${'PRECI' . $i}, $DPOINT, $THSEP);
 				$prefix  = '';
 			}
-			$data["Totalcounter$i"] = $val_tot.$prefix;
+			$data["Totalcounter$i"] = "$val_tot $prefix";
 			// daily
 			if ($memarray["First$i"] <= $memarray["Last$i"]) {
 				$val_last = $memarray["Last$i"] - $memarray["First$i"];
@@ -53,7 +53,7 @@ if (file_exists($MEMORY)) {
 				$val_last = number_format($val_last, ${'PRECI' . $i}, $DPOINT, $THSEP);
 				$prefix   = '';
 			}
-			$data["Dailycounter$i"] = $val_last.$prefix;
+			$data["Dailycounter$i"] = "$val_last $prefix";
 		} else {
 			$data["Totalcounter$i"] = '--';
 			$data["Dailycounter$i"] = '--';
