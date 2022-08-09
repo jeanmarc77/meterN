@@ -3,7 +3,7 @@ if(!defined('checkaccess')){die('Direct access not permitted');}
 // ### GENERAL
 $NUMMETER=1;
 $DELAY=20;
-$DISTRO='arch_ARM';
+$DISTRO='Linux';
 $LOGCOM=false;
 $DEBUG=false;
 $DATASET='IEC62056';
