@@ -122,12 +122,21 @@ echo "</select>
 <input type='text' name='DATEFORMATx' value='$DATEFORMAT' size=4 title='It must be a in valid php format'>
 Currency symbol <select name='CURSx'>";
 $Symlist = array(
-	"€",
-	"$",
-	"₤",
-	"¥",
-	"₵",
-	"¤"
+	'€',
+	'$',
+	'₤',
+	'¥',
+	'Kč',
+	'kr.',
+	'₪',
+	'₩',
+	'₱',
+	'zł',
+	'fr',
+	'元',
+	'₺',
+	'₵',
+	'¤'
 );
 $cnt     = count($Symlist);
 for ($i = 0; $i < $cnt; $i++) {

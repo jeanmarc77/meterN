@@ -254,7 +254,7 @@ if ($cnt > 0) {
 					$unitlist[$graphnum][] = ${'UNIT' . $i};
 					$yaxis[$graphnum]++;
 				}
-				$titlelist[$graphnum] .= '- ' . ${'METNAME' . $i} . " $val_last24[$i] $prefix[$i]"."${'UNIT'.$i} $money[$i]";
+				$titlelist[$graphnum] .= ' - ' . ${'METNAME' . $i} . " $val_last24[$i] $prefix[$i]"."${'UNIT'.$i} $money[$i]";
 			}
 
 			$cntunit = count($unitlist[$graphnum]);
