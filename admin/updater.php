@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
  * /srv/http/metern/admin/updater.php
  *
@@ -11,7 +11,7 @@ $CURDIR = $_SESSION['CURDIR']; // /srv/http/metern
 $SRVDIR = $_SESSION['SRVDIR']; // /srv/http
 
 if (empty($CURDIR) || !is_string($CURDIR) || empty($SRVDIR) || !is_string($SRVDIR) || basename(__DIR__) != '_INSTALL') {
-	die('ERROR');
+    die('ERROR');
 }
 set_time_limit(600);
 $time_start = microtime(true);
@@ -64,171 +64,194 @@ date_default_timezone_set($DTZ);
  * @param unknown $permissions
  * @return unknown
  */
-function xcopy($source, $dest, $permissions) {
-	if (is_link($source)) { // Check for symlinks
-		return symlink(readlink($source), $dest);
-	}
-	if (is_file($source)) { // Simple copy for a file
-		return copy($source, $dest);
-	}
-	if (!is_dir($dest)) { // Make destination directory
-		mkdir($dest, 0755);
-	}
-	$dir = dir($source); // Loop through the folder
-	while (false !== $entry = $dir->read()) { // Skip pointers
-		if ($entry == '.' || $entry == '..') {
-			continue;
-		}
-		xcopy("$source/$entry", "$dest/$entry", $permissions); // Deep copy directories
-	}
-	$dir->close();
-	return true;
+function xcopy($source, $dest, $permissions)
+{
+    if (is_link($source)) { // Check for symlinks
+        return symlink(readlink($source), $dest);
+    }
+    if (is_file($source)) { // Simple copy for a file
+        return copy($source, $dest);
+    }
+    if (!is_dir($dest)) { // Make destination directory
+        mkdir($dest, 0755);
+    }
+    $dir = dir($source); // Loop through the folder
+    while (false !== $entry = $dir->read()) { // Skip pointers
+        if ($entry == '.' || $entry == '..') {
+            continue;
+        }
+        xcopy("$source/$entry", "$dest/$entry", $permissions); // Deep copy directories
+    }
+    $dir->close();
+    return true;
 }
 
 
 // Check free space
 $bytes     = disk_free_space(".");
 $si_prefix = array(
-	'B',
-	'KB',
-	'MB',
-	'GB',
-	'TB',
-	'EB',
-	'ZB',
-	'YB'
+    'B',
+    'KB',
+    'MB',
+    'GB',
+    'TB',
+    'EB',
+    'ZB',
+    'YB'
 );
 $base      = 1024;
 $class     = min((int) log($bytes, $base), count($si_prefix) - 1);
 if ($bytes < 32000000) {
-	$error = true;
-	$log .= "ERROR: You should have at least 32 MB left on your disk<br>";
+    $error = true;
+    $log .= "ERROR: You should have at least 32 MB left on your disk<br>";
 } else {
-	$log .= "OK: Checked free space of at least 32 MB<br>";
+    $log .= "OK: Checked free space of at least 32 MB<br>";
 }
 
 if ($CURDIR == $SRVDIR) {
-	$error = true;
-	$log .= "ERROR: metern should not be installed as websever's root directory<br>";
+    $error = true;
+    $log .= "ERROR: metern should not be installed as websever's root directory<br>";
 }
 
 if (!$error) { // download
-	$fp = fopen("$destination", 'w+');
-	$ch = curl_init();
-	curl_setopt($ch, CURLOPT_URL, "$source");
-	//curl_setopt($ch, CURLOPT_BUFFERSIZE,128);
-	curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	curl_setopt($ch, CURLOPT_NOPROGRESS, false);
-	curl_setopt($ch, CURLOPT_HEADER, 0);
-	curl_setopt($ch, CURLOPT_FILE, $fp);
-	curl_exec($ch);
-
-	if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
-		$error = true;
-		$log .= "ERROR: Downloading<br>";
-	} else {
-		$log .= "OK: Downloading<br>";
-	}
-	curl_close($ch);
-	fclose($fp);
+    $fp = fopen("$destination", 'w+');
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, "$source");
+    //curl_setopt($ch, CURLOPT_BUFFERSIZE,128);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_NOPROGRESS, false);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_FILE, $fp);
+    curl_exec($ch);
+    
+    if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
+        $error = true;
+        $log .= "ERROR: Downloading<br>";
+    } else {
+        $log .= "OK: Downloading<br>";
+    }
+    curl_close($ch);
+    fclose($fp);
 }
 
 if (!$error) {
-	exec("md5sum $destination", $output);
-	$pieces = explode(' ', $output[0]);
-	if (!$pieces[0] == $md5) {
-		$error = true;
-		$log .= "ERROR: md5sum<br>";
-	} else {
-		$log .= "OK: md5sum checked<br>";
-	}
+    exec("md5sum $destination", $output);
+    $pieces = explode(' ', $output[0]);
+    if (!$pieces[0] == $md5) {
+        $error = true;
+        $log .= "ERROR: md5sum<br>";
+    } else {
+        $log .= "OK: md5sum checked<br>";
+    }
 }
 
 if (!$error) {
-	exec("tar -xzvf $destination -C $SRVDIR/_INSTALL/", $output, $return); // Return will return non-zero upon an error
-	if ($return) {
-		$error = true;
-		$log .= "ERROR: Extracting<br>";
-	} else {
-		$log .= "OK: Extracting<br>";
-	}
+    exec("tar -xzvf $destination -C $SRVDIR/_INSTALL/", $output, $return); // Return will return non-zero upon an error
+    if ($return) {
+        $error = true;
+        $log .= "ERROR: Extracting<br>";
+    } else {
+        $log .= "OK: Extracting<br>";
+    }
 }
 
 if (!$error) {
-	if (!xcopy("$CURDIR/data/", "$SRVDIR/_INSTALL/metern/data/", 0644)) {
-		$error = true;
-		$log .= "ERROR: Failed to import data<br>";
-	} else {
-		$log .= "OK: Imported data<br>";
-	}
-	if (!xcopy("$CURDIR/config/", "$SRVDIR/_INSTALL/metern/config/", 0644)) {
-		$error = true;
-		$log .= "ERROR: Failed to import config<br>";
-	} else {
-		$log .= "OK: Imported config<br>";
-	}
+    if (!xcopy("$CURDIR/data/", "$SRVDIR/_INSTALL/metern/data/", 0644)) {
+        $error = true;
+        $log .= "ERROR: Failed to import data<br>";
+    } else {
+        $log .= "OK: Imported data<br>";
+    }
+    if (!xcopy("$CURDIR/config/", "$SRVDIR/_INSTALL/metern/config/", 0644)) {
+        $error = true;
+        $log .= "ERROR: Failed to import config<br>";
+    } else {
+        $log .= "OK: Imported config<br>";
+    }
+}
+
+// Import user styles
+$stylist = array(
+    'default',
+    'floral',
+    'jeanmarc'
+);
+
+if (!$error) {
+    $styldir = scandir("$CURDIR/styles/");
+    $cnt     = count($styldir);
+    for ($i = 0; $i < $cnt; $i++) {
+        if (is_dir("$CURDIR/styles/$styldir[$i]/") && !in_array($styldir[$i], array('.','..')) && !in_array($styldir[$i], $stylist)) {
+            if (!xcopy("$CURDIR/styles/$styldir[$i]/", "$SRVDIR/_INSTALL/metern/styles/$styldir[$i]/", 0644)) {
+                $error = true;
+                $log .= "ERROR: Failed to import styles $styldir[$i]<br>";
+            } else {
+                $log .= "OK: Imported user style $styldir[$i]<br>";
+            }
+        }
+    }
 }
 
 if (!$error) {
-	if (file_exists("$CURDIR/scripts/metern.pid")) {
-		$PID     = (int) file_get_contents("$CURDIR/scripts/metern.pid");
-		$command = exec("kill -9 $PID > /dev/null 2>&1 &");
-		unlink("$CURDIR/scripts/metern.pid");
-		$PID = null;
-		include "$CURDIR/config/config_daemon.php"; // stop daemon
-	}
+    if (file_exists("$CURDIR/scripts/metern.pid")) {
+        $PID     = (int) file_get_contents("$CURDIR/scripts/metern.pid");
+        $command = exec("kill -9 $PID > /dev/null 2>&1 &");
+        unlink("$CURDIR/scripts/metern.pid");
+        $PID = null;
+        include "$CURDIR/config/config_daemon.php"; // stop daemon
+    }
 }
 
 if (!$error) { // Renaming
-	$d = date('Ymd');
-	exec("mv $CURDIR/ $CURDIR" . "$d/", $output, $return); // Return will return non-zero upon an error
-	if ($return) {
-		$error = true;
-		$log .= "ERROR: mv $CURDIR/ $CURDIR.$d/<br>";
-	} else {
-		$log .= "OK: mv $CURDIR/ $CURDIR.$d/<br>";
-	}
+    $d = date('Ymd');
+    exec("mv $CURDIR/ $CURDIR" . "$d/", $output, $return); // Return will return non-zero upon an error
+    if ($return) {
+        $error = true;
+        $log .= "ERROR: mv $CURDIR/ $CURDIR.$d/<br>";
+    } else {
+        $log .= "OK: mv $CURDIR/ $CURDIR.$d/<br>";
+    }
 }
 
 if (!$error) { // Installing new
-	exec("mv $SRVDIR/_INSTALL/metern/ $CURDIR/", $output, $return);
-	if ($return) {
-		$error = true;
-		$log .= "ERROR: mv $SRVDIR/_INSTALL/metern/ $CURDIR/<br>";
-	} else {
-		$log .= "OK: mv $SRVDIR/_INSTALL/metern/ $CURDIR/<br>";
-	}
+    exec("mv $SRVDIR/_INSTALL/metern/ $CURDIR/", $output, $return);
+    if ($return) {
+        $error = true;
+        $log .= "ERROR: mv $SRVDIR/_INSTALL/metern/ $CURDIR/<br>";
+    } else {
+        $log .= "OK: mv $SRVDIR/_INSTALL/metern/ $CURDIR/<br>";
+    }
 }
 
 if (file_exists($destination)) {
-	if (!unlink("$destination")) {
-		$log .= "ERROR: Can't remove $destination<br>";
-	} else {
-		$log .= "OK: Removed $destination<br>";
-	}
+    if (!unlink("$destination")) {
+        $log .= "ERROR: Can't remove $destination<br>";
+    } else {
+        $log .= "OK: Removed $destination<br>";
+    }
 }
 
 // Sync
 exec("sync", $output, $return);
 
 if (!$error) { // Compressing older in background
-	$d   = date('Ymd');
-	$rnd = rand();
-	shell_exec("tar -czPf $SRVDIR/_INSTALL/mN_backup_" . $d . '_' . $rnd . ".tar.gz $CURDIR" . "$d/ --remove-files 2>/dev/null >/dev/null &");
+    $d   = date('Ymd');
+    $rnd = rand();
+    shell_exec("tar -czPf $SRVDIR/_INSTALL/mN_backup_" . $d . '_' . $rnd . ".tar.gz $CURDIR" . "$d/ --remove-files 2>/dev/null >/dev/null &");
 }
 
 if (!$error) {
-	echo "<br>
+    echo "<br>
 <font color='#228B22'><b>Update completed.</b></font>
 <br><br>$SRVDIR/_INSTALL/mN_backup_" . $d . '_' . $rnd . ".tar.gz is being created. For security reason, move it away from your webserver directory !
 <br><br>If you have graphical issue, force the refresh of your browser cache ( <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>R</kbd> )
 <br><br><u>Side notes:</u> Previous personal modifications weren't imported (eg: styles/)
 <br><br>Please, take also this occasion to update your system.";
 } else {
-	$time_end       = microtime(true);
-	$execution_time = (float) $time_end - $time_start;
-	echo "<br><font color='#8B0000'><b>The update didn't complete as expected !</b></font>
+    $time_end       = microtime(true);
+    $execution_time = (float) $time_end - $time_start;
+    echo "<br><font color='#8B0000'><b>The update didn't complete as expected !</b></font>
 <br><br>$log
 <br>CURDIR: $CURDIR
 <br>SRVDIR: $SRVDIR
@@ -246,4 +269,4 @@ echo "<br><br><INPUT TYPE='button' onClick=\"location.href='..$trimmed/admin/'\"
 </html>
 <?php
 unlink(__FILE__);
-?>
+?> 
