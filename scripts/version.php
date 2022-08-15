@@ -6,7 +6,7 @@
  */
 
 
-$VERSION='meterN 1.2.3.3';
+$VERSION='meterN 1.2.4';
 $CFGmain=1559293870;
 $CFGmet=1580629442;
 $CFGlay=1506503500;
