@@ -115,7 +115,11 @@ if ($cfgver < $CFGlay) {
 	$err_txt .= " config_indicator";
 	$err_cfg = true;
 }
-if (!file_exists('../config/allowed_comapps.php')) { // Create allowed_comapps for older mN versions
+// Create allowed_comapps for older mN versions
+if (file_exists('../config/allowed_comapps.php')) {
+	include '../config/allowed_comapps.php';
+} 
+if (!file_exists('../config/allowed_comapps.php') || !isset($ALLWDCMD[0])) { 
 	$myFile = '../config/allowed_comapps.php';
 	$fh = fopen($myFile, 'w+') or die("<font color='#8B0000'><b>Can't open $myFile file. Configuration not saved !</b></font>");
 	$stringData = "<?php
