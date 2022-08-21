@@ -119,7 +119,7 @@ if ($cfgver < $CFGlay) {
 if (file_exists('../config/allowed_comapps.php')) {
 	include '../config/allowed_comapps.php';
 } 
-if (!file_exists('../config/allowed_comapps.php') || !isset($ALLWDCMD[0])) { 
+if (!file_exists('../config/allowed_comapps.php') || empty($ALLWDCMD)) { 
 	$myFile = '../config/allowed_comapps.php';
 	$fh = fopen($myFile, 'w+') or die("<font color='#8B0000'><b>Can't open $myFile file. Configuration not saved !</b></font>");
 	$stringData = "<?php
