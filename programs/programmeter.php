@@ -84,7 +84,7 @@ if ($cnt > 0) {
 				$val_last  = null;
 
 				if ($UTCdate - $prevUTCdate == 300000 && $nowutc - $UTCdate <= 86400000) { // 5 min sample & avoid older than 24h
-					if (isset($prevarray[$i]) && isset($linearray[$i])) {
+					if (!empty($prevarray[$i]) && !empty($linearray[$i])) {
 						$val_first = trim($prevarray[$i]);
 						$val_last  = trim($linearray[$i]);
 					}
