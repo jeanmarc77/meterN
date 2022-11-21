@@ -88,13 +88,13 @@ if (file_exists("../data/csv/$date1")) {
 			if ($check[$i]) {
 				$val_first = null;
 				$val_last  = null;
-
 				if (isset($array[$i])) {
 					$val_first = trim($prevarray[$i]);
-				}
+				} 
 				if (isset($prevarray[$i])) {
 					$val_last = trim($array[$i]);
-				}
+				} 
+				
 				if (${'TYPE' . $i} != 'Sensor') { // Meter
 					if (empty($val_first24[$i]) && !empty($val_first)) {
 						$val_first24[$i] = $val_first;
