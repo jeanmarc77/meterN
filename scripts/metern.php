@@ -24,6 +24,9 @@ while (true) { // To infinity ... and beyond!
 			$datareturn = trim(implode($datareturn));
 			$val        = isvalid(${'LID' . $metnum}, $datareturn);
 			if (isset($val)) {
+				if($val == 'empty') {
+					$val = null;
+				}
 				$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
 
 				if (${'comlost' . $metnum} && ${'NORESPM' . $metnum}) {
@@ -75,7 +78,7 @@ while (true) { // To infinity ... and beyond!
 						sleep($giveup);
 						$giveup++;
 					}
-					if (!is_numeric($lastval)) {
+					if (!is_numeric($lastval) || $lastval == 'empty') {
 						$lastval = null;
 					}
 					if ($giveup > 2) {
@@ -100,7 +103,7 @@ while (true) { // To infinity ... and beyond!
 				}
 				$stringData5 .= ",$lastval";
 				
-				if (isset($lastval)) {
+				if (is_numeric($lastval)) {
 					if (${'TYPE' . $i} != 'Sensor' && ($lastval < 0 || (${'PASSO' . $i} > 0 &&  $lastval > ${'PASSO' . $i}))) {
 						$now = date($DATEFORMAT . ' H:i:s');
 						logevents("$now\tError #$i ${'METNAME'.$i} report a wrong value\n\n");
