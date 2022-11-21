@@ -93,7 +93,8 @@ if ($cnt > 0) {
 					}
 				}
 
-				if (${'TYPE' . $i} != 'Sensor' && !empty($val_first) && !empty($val_last)) { // meter
+			if (${'TYPE' . $i} != 'Sensor') { // meter
+				if(!empty($val_first) && !empty($val_last)) {
 					settype($val_first, 'float');
 					settype($val_last, 'float');
 					if ($val_first <= $val_last) {
@@ -101,20 +102,23 @@ if ($cnt > 0) {
 					} else { // counter pass over
 						$val_last += ${'PASSO' . $i} - $val_first;
 					}
-
 					$val_last      = round($val_last, ${'PRECI' . $i});
-					$stack[$i][$y] = array(
-						$UTCdate,
-						$val_last
-					);
-				} elseif (${'TYPE' . $i} == 'Sensor' && !empty($val_last)) { // sensor
-					settype($val_last, 'float');
-					$val_last      = round($val_last, ${'PRECI' . $i});
-					$stack[$i][$y] = array(
-						$UTCdate,
-						$val_last
-					);
-				}
+				} 
+				$stack[$i][$y] = array(
+					$UTCdate,
+					$val_last
+				);
+			} elseif (${'TYPE' . $i} == 'Sensor') { // sensor
+				if (!empty($val_last)) {
+				settype($val_last, 'float');
+				$val_last      = round($val_last, ${'PRECI' . $i});
+				} 
+				$stack[$i][$y] = array(
+					$UTCdate,
+					$val_last
+				);
+			}
+			
 			}
 			$y++;
 		}
@@ -163,23 +167,26 @@ if ($cnt > 0) {
 				}
 			}
 
-			if (${'TYPE' . $i} != 'Sensor' && !empty($val_first) && !empty($val_last)) { // meter
-				settype($val_first, 'float');
-				settype($val_last, 'float');
-				if ($val_first <= $val_last) {
-					$val_last -= $val_first;
-				} else { // counter pass over
-					$val_last += ${'PASSO' . $i} - $val_first;
-				}
-
-				$val_last      = round($val_last, ${'PRECI' . $i});
+			if (${'TYPE' . $i} != 'Sensor') { // meter
+				if(!empty($val_first) && !empty($val_last)) {
+					settype($val_first, 'float');
+					settype($val_last, 'float');
+					if ($val_first <= $val_last) {
+						$val_last -= $val_first;
+					} else { // counter pass over
+						$val_last += ${'PASSO' . $i} - $val_first;
+					}
+					$val_last      = round($val_last, ${'PRECI' . $i});
+				} 
 				$stack[$i][$y] = array(
 					$UTCdate,
 					$val_last
 				);
-			} elseif (${'TYPE' . $i} == 'Sensor' && !empty($val_last)) { // sensor
+			} elseif (${'TYPE' . $i} == 'Sensor') { // sensor
+				if (!empty($val_last)) {
 				settype($val_last, 'float');
 				$val_last      = round($val_last, ${'PRECI' . $i});
+				} 
 				$stack[$i][$y] = array(
 					$UTCdate,
 					$val_last
