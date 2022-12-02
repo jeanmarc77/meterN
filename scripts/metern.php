@@ -23,12 +23,11 @@ while (true) { // To infinity ... and beyond!
 			exec(${'LIVECOMMAND' . $metnum}, $datareturn);
 			$datareturn = trim(implode($datareturn));
 			$val        = isvalid(${'LID' . $metnum}, $datareturn);
-			if (isset($val)) {
-				if($val == 'empty') {
-					$val = null;
-				}
+			if (!is_null($val)) {
 				$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
-
+				if ($val == 'empty') {
+					$val = 0;
+				}
 				if (${'comlost' . $metnum} && ${'NORESPM' . $metnum}) {
 					${'comlost' . $metnum} = false;
 					$now = date($DATEFORMAT . ' H:i:s');
@@ -114,9 +113,7 @@ while (true) { // To infinity ... and beyond!
 					if (!isset($memarray["First$i"])) {
 					$memarray["First$i"] = $memarray["Last$i"];
 					}
-				} else {
-					$memarray["Last$i"] = null;
-				}
+				} 
 			} // For each meters
 			$stringData5 .= "\r\n";
 
