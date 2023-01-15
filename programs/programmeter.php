@@ -91,6 +91,9 @@ if ($cnt > 0) {
 					if (empty($val_first24[$i]) && !empty($val_first)) {
 						$val_first24[$i] = $val_first;
 					}
+					if (!empty($val_last)) {
+					$val_last24[$i] = $val_last;
+					}
 				}
 
 			if (${'TYPE' . $i} != 'Sensor') { // meter
@@ -212,7 +215,6 @@ if ($cnt > 0) {
 	for ($i = 1; $i <= $NUMMETER; $i++) {
 		settype($val_first24[$i], 'float');
 		settype($val_last24[$i], 'float');
-
 		if (${'TYPE' . $i} != 'Sensor') { // Meter
 			if ($val_first24[$i] <= $val_last24[$i]) {
 				$val_last24[$i] -= $val_first24[$i];
