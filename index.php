@@ -357,6 +357,7 @@ if ($showlastd) {
 /// Last days prod ///
 var Mychart$i, options$i = {
 chart: {
+type: 'column',
 backgroundColor: null,
 defaultSeriesType: 'column',
 zoomType: 'xy'
