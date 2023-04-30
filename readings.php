@@ -115,7 +115,8 @@ var Mychart, options = {
 				},
             },
 			title: {
-				text: defaultTitle
+				text: defaultTitle,
+				style: {fontSize: '1em'}
 			},
             subtitle: {text: '$lgCONSUSUBTITLE'},
             xAxis: {

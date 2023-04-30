@@ -226,7 +226,8 @@ if ($metnum == $comparemet) {
 }
 echo "
 title: {
-  text: '$title'
+  text: '$title',
+  style: {fontSize: '1em'}
 },
 subtitle: { text: '$lgCOMPARESUBTITLE' },
 xAxis: [{

@@ -246,7 +246,8 @@ loading: {
   style: { backgroundColor: null }
 },
 title: {
-text: 'loading..'
+text: 'loading..',
+style: {fontSize: '1em'}
 },
 subtitle: {
 },
@@ -368,7 +369,8 @@ loading: {
 },
 credits: {enabled: false},
 title: {
-text: '$lgLAST 15 $lgDAYS'
+text: '$lgLAST 15 $lgDAYS',
+style: {fontSize: '1em'}
 },
 subtitle: {text: '$lgLASTPRODSUBTITLE'},
 xAxis: {

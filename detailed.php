@@ -114,6 +114,10 @@ spaceRight:20
 credits: {enabled: false},
 <?php
 echo "
+title: {
+text: 'loading..',
+style: {fontSize: '1em'}
+},
 subtitle: { text: '$lgDETAILSUBTITLE' },
 xAxis: {
 type: 'datetime',
