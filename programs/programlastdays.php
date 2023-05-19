@@ -13,7 +13,6 @@ date_default_timezone_set('UTC');;
 $dir      = '../data/meters/';
 $unitlist = array();
 $SYSlist = array();
-$stack   = array();
 $yaxis    = 0;
 $cnt      = 0;
 
@@ -34,6 +33,7 @@ $datanum=0;
 $yesterd = ((strtotime(date('Ymd')) - 86400) * 1000);
 
 for ($i = 0; $i < $cnt; $i++) {
+	$stack   = array();
 	$metnum = $SYSlist[$i];
 	$PRODXDAYS = 15;
 	$thisyear = date('Y',strtotime('-1 days'));
