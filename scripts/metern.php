@@ -23,7 +23,7 @@ while (true) { // To infinity ... and beyond!
 			exec(${'LIVECOMMAND' . $metnum}, $datareturn);
 			$datareturn = trim(implode($datareturn));
 			$val        = isvalid(${'LID' . $metnum}, $datareturn);
-			if (!is_null($val)) {
+			if (isset($val)) {
 				$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
 				if ($val == 'empty') {
 					$val = 0;
