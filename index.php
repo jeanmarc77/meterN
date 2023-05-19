@@ -287,7 +287,8 @@ yAxis: [";
 			echo "
 {
 title: {text: '${'UNIT'.$j}'},
-min : 0
+softMin: 0,
+softMax: 1
 }";
 
 		}
