@@ -286,7 +286,8 @@ yAxis: [";
 			}
 			echo "
 {
-title: {text: '${'UNIT'.$j}'}
+title: {text: '${'UNIT'.$j}'},
+min : 0
 }";
 
 		}
