@@ -288,7 +288,7 @@ yAxis: [";
 {
 title: {text: '${'UNIT'.$j}'},
 softMin: 0,
-softMax: 1
+softMax: 0.01
 }";
 
 		}
