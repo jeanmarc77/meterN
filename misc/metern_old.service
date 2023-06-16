@@ -1,0 +1,13 @@
+[Unit]
+Description=meterN
+After=network.target nginx.service php-fpm.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/curl http://localhost/metern/scripts/bootmn.php
+#ExecStart=/usr/bin/curl --insecure --user admin:password -s https://localhost/metern/scripts/bootmn.php
+#Since version 7.4 php-fpm is hardened
+ReadWritePaths = /var/lock
+
+[Install]
+WantedBy=multi-user.target

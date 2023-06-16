@@ -1,12 +1,23 @@
 [Unit]
 Description=meterN
+Requires=network.target
 After=network.target nginx.service php-fpm.service
-
+StartLimitIntervalSec=60
+StartLimitBurst=5
+ 
 [Service]
-Type=oneshot
-ExecStart=/usr/bin/curl http://localhost/metern/scripts/bootmn.php
-#ExecStart=/usr/bin/curl --insecure https://localhost/metern/scripts/bootmn.php
-#ExecStart=/usr/bin/curl --insecure --user user:password -s https://localhost/metern/scripts/bootmn.php
-
+Type=simple
+WorkingDirectory=/srv/http/metern/scripts/
+ExecStart=/usr/bin/php metern.php
+# force PIDFILE see 'man systemd.service'
+ExecStartPost=/bin/sh -c 'systemctl show -p MainPID --value metern.service > /srv/http/metern/scripts/metern.pid'
+ExecStopPost=/usr/bin/rm -f /srv/http/metern/scripts/metern.pid
+User=http
+Group=http
+Restart=always
+RestartSec=2s
+#Since version 7.4 php-fpm is hardened
+ReadWritePaths = /var/lock
+ 
 [Install]
-WantedBy=multi-user.target
+WantedBy=default.target
