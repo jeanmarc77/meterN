@@ -25,7 +25,7 @@ while (true) { // To infinity ... and beyond!
 			$val        = isvalid(${'LID' . $metnum}, $datareturn);
 			if (isset($val)) {
 				$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
-				if ($val == 'empty') {
+				if (empty($val)) {
 					$val = 0;
 				}
 				if (${'comlost' . $metnum} && ${'NORESPM' . $metnum}) {
@@ -77,7 +77,7 @@ while (true) { // To infinity ... and beyond!
 						sleep($giveup);
 						$giveup++;
 					}
-					if (!is_numeric($lastval) || $lastval == 'empty') {
+					if (!is_numeric($lastval)) {
 						$lastval = null;
 					}
 					if ($giveup > 2) {
