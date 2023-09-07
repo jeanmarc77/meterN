@@ -63,7 +63,7 @@ $output = array();
 
 for ($i = 0; $i < $xyears; $i++) {
 	$option = substr($stack[$i], -8, 4);
-	if (file_exists('data/meters/' . $comparemet . ${'METNAME' . $comparemet} . $option . '.csv')) {
+	if (file_exists('data/meters/' . $metnum . ${'METNAME' . $metnum} . $option . '.csv')) {
 		array_push($output, $stack[$i]);
 	}
 }
@@ -145,6 +145,19 @@ if ($comparemonth != 13) {
 echo "
 </select>
 <select name='compareyear' onchange='this.form.submit()'>";
+$stack = glob($dir . $comparemet . ${'METNAME' . $comparemet} . '*.csv');
+sort($stack);
+$xyears = count($stack);
+$output = array();
+
+for ($i = 0; $i < $xyears; $i++) {
+	$option = substr($stack[$i], -8, 4);
+	if (file_exists('data/meters/' . $comparemet . ${'METNAME' . $comparemet} . $option . '.csv')) {
+		array_push($output, $stack[$i]);
+	}
+}
+sort($output);
+$xyears = count($output);
 for ($i = ($xyears - 1); $i >= 0; $i--) {
 	$output[$i] = str_replace("$dir", '', "$output[$i]");
 	$option     = substr($output[$i], -8, 4);
