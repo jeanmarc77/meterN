@@ -56,7 +56,7 @@ if (!file_exists('data/meters/' . $comparemet . ${'METNAME' . $comparemet} . $co
 }
 
 $dir   = 'data/meters/';
-$stack = glob($dir . "$metnum*.csv");
+$stack = glob($dir . $metnum . ${'METNAME' . $metnum} . '*.csv');
 sort($stack);
 $xyears = count($stack);
 $output = array();
