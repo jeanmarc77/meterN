@@ -244,6 +244,7 @@ if ($startstop != 'start' && $startstop != 'stop') {
 <tr><td>&nbsp;</td></tr>
 <tr><td width=13></td><td align='left'><b>Correction</b></td></tr>
 <tr><td width=13><img src='../styles/default/images/sqe.gif'></td><td align='left'><a href='correction.php'>Change daily value(s)</a></td></tr>
+<tr><td width=13><img src='../styles/default/images/sqe.gif'></td><td align='left'><a href='recalculate.php'>Recalculate daily value(s)</a></td></tr>
 <tr><td width=13><img src='../styles/default/images/sqe.gif'></td><td align='left'><a href='redefine.php'>Redefine index(es)</a></td></tr>
 <tr><td>&nbsp;</td></tr>
 <tr><td width=13></td><td align='left'><b>Misc.</b></td></tr>
