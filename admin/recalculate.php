@@ -161,9 +161,6 @@ if (file_exists($thisfile)) {
 	}
 }
 
-$originalLocales = explode(";", setlocale(LC_ALL, 0));
-setlocale(LC_ALL, "it_IT.utf8");
-
 echo "
 <form method='POST' action='correction2.php' id='form2'>
 <table width='40%' border=1 cellspacing=0 cellpadding=0 align=center>
