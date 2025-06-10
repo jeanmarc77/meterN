@@ -161,6 +161,9 @@ if (file_exists($thisfile)) {
 	}
 }
 
+$originalLocales = explode(";", setlocale(LC_ALL, 0));
+setlocale(LC_ALL, "it_IT.utf8");
+
 echo "
 <form method='POST' action='correction2.php' id='form2'>
 <table width='40%' border=1 cellspacing=0 cellpadding=0 align=center>
@@ -179,11 +182,11 @@ for ($j = 1; $j <= $daythatm; $j++) {
 	$stamp = strtotime(date($whichyear . '/' . $whichmonth . '/' . $j));
 	$dday  = date($DATEFORMAT, $stamp);
 	$ddaycsv = date('Ymd', $stamp) . '.csv';
-	
+
 	$check[$metnum] = true;
 	$meter = urlencode(json_encode($check));
-	
-	$url = 'http://localhost/metern/programs/programdetailed.php?date1=' . $ddaycsv . '&meter=' . $meter . '&cumul=';
+
+	$url = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . '/' . explode('/', $_SERVER['REQUEST_URI'])[1] . '/programs/programdetailed.php?date1=' . $ddaycsv . '&meter=' . $meter . '&cumul=';
 	// Use file_get_contents to fetch the page content
 	$json = file_get_contents($url);
 
@@ -196,8 +199,10 @@ for ($j = 1; $j <= $daythatm; $j++) {
 	$data = json_decode($json, true);
 	$val24 = $data['data'][0]['val24'] ?? null;
 	// Extract the numeric part of the string
-	$floatValue = (float) filter_var($val24, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-	$val_day_calc[$j] = (float) $floatValue * 1000;
+	$stringVal = filter_var($val24, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+
+	$val = $number = floatval(str_replace($DPOINT, '.', str_replace($THSEP, '', $stringVal)));
+	$val_day_calc[$j] = (float) $val;
 	$check[$metnum] = false;
 	$sum2 += $val_day_calc[$j];
 
