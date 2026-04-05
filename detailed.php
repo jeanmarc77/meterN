@@ -80,6 +80,7 @@ Highcharts.setOptions({
 global: {
 useUTC: true
 },
+accessibility:{enabled:false},
 lang: {
 decimalPoint: '<?php
 echo $DPOINT;

@@ -180,6 +180,7 @@ Highcharts.setOptions({
 global: {
 useUTC: true
 },
+accessibility:{enabled:false},
 lang: {
 decimalPoint: '$DPOINT',
 thousandsSep: '$THSEP',
