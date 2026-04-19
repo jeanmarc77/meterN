@@ -5,19 +5,18 @@
  * @package default
  */
 
-if (false) { // Set to true if you wish to use local lib
+$JSjquery = "https://code.jquery.com/jquery-4.0.0.min.js' integrity='sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=' crossorigin='anonymous";
+$JSjqui   = "https://code.jquery.com/ui/1.14.2/jquery-ui.min.js' integrity='sha256-mblSWfbYzaq/f+4akyMhE6XELCou4jbkgPv+JQPER2M=' crossorigin='anonymous";
+$JSjquit  = "https://code.jquery.com/ui/1.14.2/themes/south-street/jquery-ui.css";
+	
+if (true) { // Set to true if you wish to use Highcharts local lib
 	$HC     = 'js/highcharts/highcharts.js';
 	$HCmore = 'js/highcharts/highcharts-more.js';
 	$HCdd   = 'js/highcharts/modules/drilldown.js';
 	$HCexp  = 'js/highcharts/modules/exporting.js';
-	$HCann  = 'js/highcharts/annotations.js';
-	$JSjquery = 'js/jquery/jquery-3.6.0.min.js';
-	$JSjqui   = 'js/jquery/jquery-ui.min.js';
-	$JSjquit  = 'js/jquery/jquery-ui.css';
+	$HCann  = 'js/highcharts/modules/annotations.js';
 } else {
-	$JSjquery = "https://code.jquery.com/jquery-3.7.1.min.js' integrity='sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=' crossorigin='anonymous";
-	$JSjqui   = "https://code.jquery.com/ui/1.14.1/jquery-ui.min.js' integrity='sha256-AlTido85uXPlSyyaZNsjJXeCs07eSv3r43kyCVc8ChI=' crossorigin='anonymous";
-	$JSjquit  = "https://code.jquery.com/ui/1.14.1/themes/south-street/jquery-ui.css";
+
 	$HC       = "https://code.highcharts.com/highcharts.js";
 	$HCmore   = 'https://code.highcharts.com/highcharts-more.js';
 	$HCdd     = 'https://code.highcharts.com/modules/drilldown.js';
