@@ -100,20 +100,21 @@ while (true) { // To infinity ... and beyond!
 					$PCtime      = date('H:i');
 					$stringData5 = "$PCtime";
 				}
+				if (is_numeric($lastval) && ${'TYPE' . $i} != 'Sensor'
+					&& ($lastval < 0 || (${'PASSO' . $i} > 0 && $lastval > ${'PASSO' . $i}))) {
+					$now = date($DATEFORMAT . ' H:i:s');
+					logevents("$now\tError #$i ${'METNAME'.$i} report a wrong value\n\n");
+					$lastval = null;
+				}
+
 				$stringData5 .= ",$lastval";
-				
+
 				if (is_numeric($lastval)) {
-					if (${'TYPE' . $i} != 'Sensor' && ($lastval < 0 || (${'PASSO' . $i} > 0 &&  $lastval > ${'PASSO' . $i}))) {
-						$now = date($DATEFORMAT . ' H:i:s');
-						logevents("$now\tError #$i ${'METNAME'.$i} report a wrong value\n\n");
-						$lastval='';
-					}				
-				
 					$memarray["Last$i"] = round((float) $lastval, ${'PRECI' . $i});
 					if (!isset($memarray["First$i"])) {
-					$memarray["First$i"] = $memarray["Last$i"];
+						$memarray["First$i"] = $memarray["Last$i"];
 					}
-				} 
+				}
 			} // For each meters
 			$stringData5 .= "\r\n";
 
