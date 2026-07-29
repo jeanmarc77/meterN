@@ -186,6 +186,7 @@ for ($i = 1; $i <= $NUMMETER; $i++) {
 	$livememarray['UTC']               = strtotime(date('Ymd H:i:s'));
 	$livememarray["${'METNAME'.$i}$i"] = 0;
 	${'comlost' . $i}                  = false;
+	${'livealert' . $i}                = false; // latch for the live-value threshold, see metern.php
 
 	if (${'TYPE' . $i} != 'Sensor' && $fileUTCdate == $todayUTC) { // Firsts and Lasts of the day
 		$val_last  = null;

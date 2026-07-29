@@ -18,11 +18,22 @@ while (true) { // To infinity ... and beyond!
 		$data         = file_get_contents($LIVEMEMORY);
 		$livememarray = json_decode($data, true);
 
+		// Reset for every meter: left over from the previous iteration it
+		// would let one meter's reading raise an alert on the next one,
+		// whenever that one has no $LIVECOMMAND of its own to run.
+		$val_live = null;
+
 		if (!${'SKIPMONITORING' . $metnum} && !empty(${'LIVECOMMAND' . $metnum})) {
 			$val = null;
 			exec(${'LIVECOMMAND' . $metnum}, $datareturn);
 			$datareturn = trim(implode($datareturn));
 			$val        = isvalid(${'LID' . $metnum}, $datareturn);
+			// Only a real reading is worth comparing to a threshold:
+			// isvalid() returns null when it rejects the response outright,
+			// and '' is the reader's own "no fresh sample this cycle"
+			// marker. Neither is a value, so neither may raise an alert -
+			// nor clear one, see the latch below.
+			$val_live = ($val !== null && $val !== '' && is_numeric($val)) ? (float) $val : null;
 			if (isset($val)) {
 				$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
 				if ($val === '') {
@@ -71,6 +82,41 @@ while (true) { // To infinity ... and beyond!
 			$val                 = '0';
 			$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
 			$livememarray["${'METNAME'.$metnum}$metnum"] = $val; // Live value
+		}
+
+		// Instant alert on a live value crossing a threshold - independent
+		// of the daily WARNCONSOD check below, which only ever looks at the
+		// running total for the day, not at what a meter is reporting right
+		// now. Opt-in per meter via $WARNLIVE$metnum, read straight from
+		// config_met$metnum.php: deliberately NOT wired into the admin
+		// panel (admin_meter.php/admin_meter2.php) in this patch. Doing so
+		// would mean admin_meter2.php stamps every saved meter with the
+		// current $CFGmet, so admin.php would flag every existing
+		// installation's meter configs as outdated until each one is
+		// re-saved - a migration this patch has no need to force. Adding
+		// the panel UI is a natural follow-up if this direction is wanted.
+		if (!${'SKIPMONITORING' . $metnum} && isset(${'WARNLIVE' . $metnum}) && ${'WARNLIVE' . $metnum} != 0) {
+			if (isset($val_live) && $val_live > ${'WARNLIVE' . $metnum}) {
+				if (!${'livealert' . $metnum}) { // rising edge only, not every cycle spent above threshold
+					${'livealert' . $metnum} = true;
+					$now        = date($DATEFORMAT . ' H:i:s');
+					$stringData = "$now\t#$metnum ${'METNAME'.$metnum} live value reached $val_live ${'LIVEUNIT'.$metnum}\n\n";
+					logevents($stringData);
+					if (!empty(${'POAKEY' . $metnum}) && !empty(${'POUKEY' . $metnum})) {
+						$pushover = pushover(${'POAKEY' . $metnum}, ${'POUKEY' . $metnum}, "#$metnum ${'METNAME'.$metnum} Warning", $stringData);
+					}
+					if (!empty(${'TLGRTOK' . $metnum}) && !empty(${'TLGRCID' . $metnum})) {
+						$telegram = telegram(${'TLGRTOK' . $metnum}, ${'TLGRCID' . $metnum}, "meterN $stringData");
+					}
+				}
+			} elseif (isset($val_live)) {
+				// Back under threshold with a real reading: ready to fire
+				// again on the next excursion. A missing or rejected
+				// reading ($val_live null) leaves the latch alone, so a
+				// communication gap can never be misread as "back to
+				// normal" and mask the second half of the same excursion.
+				${'livealert' . $metnum} = false;
+			}
 		}
 
 		$minute   = date('i');
