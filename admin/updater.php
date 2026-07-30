@@ -224,6 +224,21 @@ if (!$error) { // Installing new
     }
 }
 
+if (!$error) { // Log the update so that a later anomaly can be matched with it
+    // Written here, once the new installation is in place, so the line lands
+    // in the events of the running install; data/ was imported earlier, so
+    // the previous history is already there. logevents() is not used: it
+    // lives in scripts/loadcfg.php and builds its path from __FILE__, which
+    // no longer resolves now that the old installation has been renamed.
+    $now        = date($DATEFORMAT . ' H:i:s');
+    $eventsfile = "$CURDIR/data/events.txt";
+    if (file_put_contents($eventsfile, "$now\tUpdated to meterN $lastv\n\n" . @file_get_contents($eventsfile)) === false) {
+        $log .= "ERROR: Failed to log the update in the events<br>";
+    } else {
+        $log .= "OK: Logged the update in the events<br>";
+    }
+}
+
 if (file_exists($destination)) {
     if (!unlink("$destination")) {
         $log .= "ERROR: Can't remove $destination<br>";
