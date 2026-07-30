@@ -25,8 +25,21 @@ while (true) { // To infinity ... and beyond!
 			$val        = isvalid(${'LID' . $metnum}, $datareturn);
 			if (isset($val)) {
 				$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
-				if (empty($val)) {
-					$val = 0;
+				if ($val === '') {
+					// The reader's own "no fresh sample this cycle" marker
+					// (an IEC 62056 tuple with an empty value, eg. ID(*W)) -
+					// not a communication failure, but there is nothing to
+					// show either. Drop the key instead of writing a
+					// fabricated 0: index.php already renders a missing key
+					// as "err" (see its "typeof val === 'undefined'" check),
+					// and dropping it also stops a stale reading from one
+					// meter lingering under this key forever once dropped -
+					// $livememarray is carried over from the previous cycle,
+					// so leaving the old value in place would keep showing
+					// it as if it were still current.
+					unset($livememarray["${'METNAME'.$metnum}$metnum"]);
+				} else {
+					$livememarray["${'METNAME'.$metnum}$metnum"] = $val;
 				}
 				if (${'comlost' . $metnum} && ${'NORESPM' . $metnum}) {
 					${'comlost' . $metnum} = false;
@@ -43,7 +56,10 @@ while (true) { // To infinity ... and beyond!
 					$logc[$metnum] = false;
 				}
 			} else {
-				$val                 = '0';
+				// isvalid() rejected the response outright: a real
+				// communication failure, not just an empty reading. Same
+				// reasoning as above - no key, no fabricated 0.
+				unset($livememarray["${'METNAME'.$metnum}$metnum"]);
 				$livememarray['UTC'] = '0';
 				if ($LOGCOM && !$logc[$metnum]) {
 					$logc[$metnum] = true;
@@ -54,9 +70,8 @@ while (true) { // To infinity ... and beyond!
 		} else {
 			$val                 = '0';
 			$livememarray['UTC'] = strtotime(date('Ymd H:i:s'));
+			$livememarray["${'METNAME'.$metnum}$metnum"] = $val; // Live value
 		}
-
-		$livememarray["${'METNAME'.$metnum}$metnum"] = $val; // Live value
 
 		$minute   = date('i');
 		if (in_array($minute, $minlist) && !$memarray['5minflag']) { // 5 min jobs
