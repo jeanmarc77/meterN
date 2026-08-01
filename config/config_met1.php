@@ -27,6 +27,10 @@ $TLGRTOK1		 = '';
 $TLGRCID1		 = '';
 $WARNCONSOD1     = 15000;
 $NORESPM1        = true;
+// $WARNLIVE1    = 0;             // optional: instant alert when the live
+                                   // value goes above this, 0 or unset to
+                                   // disable. Not (yet) in the admin panel,
+                                   // see scripts/metern.php.
 
 $cfgver=1580629442;
 ?>
