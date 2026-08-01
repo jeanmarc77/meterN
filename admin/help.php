@@ -125,6 +125,8 @@ echo "<br><br>Some distros have 755 by default, some application need to write p
 </td></tr>
 <tr><td valign='top'><b>Files checker tool :</b> <a href='fsyntax.php'>fsyntax</a>
 </td></tr>
+<tr><td valign='top'><b>Com. app. reliability :</b> <a href='comtester.php'>Com tester</a>
+</td></tr>
 <tr><td valign='top'><b>Hardware and communication apps. rights :</b><br>
 <br><b>Grant the permission to execute your com. apps.</b> Locate them with 'whereis mycomapp' and 'chmod a+x /pathto/mycomapp.py'.
 <br><b>Make a shortcut</b> (e.g. 'ln -s /pathto/mycomapp.py /usr/bin/mycomapp')<br>
